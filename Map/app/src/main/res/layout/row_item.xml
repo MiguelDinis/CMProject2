@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="220dp"
+    android:layout_height="145dp"
+    android:layout_marginLeft="9dp"
+    android:background="@drawable/round">
+<androidx.cardview.widget.CardView
+    card_view:cardCornerRadius="20dp"
+    card_view:cardElevation="0dp"
+    android:layout_width="220dp"
+    android:layout_height="145dp">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/round2"
+        android:tint="#40000000"/>
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="173dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_marginLeft="6dp"
+        android:layout_marginTop="35dp"
+        android:layout_marginEnd="25dp"
+        android:layout_marginRight="25dp"
+        android:layout_marginBottom="45dp"
+        android:gravity="center"
+        android:text="Montain Dew"
+        android:textColor="#FFF"
+        android:textSize="20dp"
+        android:textStyle="bold" />
+
+    <ImageView
+        android:id="@+id/duration"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginLeft="6dp"
+        android:layout_marginTop="68dp"
+        android:layout_marginEnd="25dp"
+        android:layout_marginRight="25dp"
+        android:layout_marginBottom="45dp"
+        android:src="@drawable/ic_duration"  />
+    <ImageView
+        android:id="@+id/distance"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginLeft="6dp"
+        android:layout_marginTop="88dp"
+        android:layout_marginEnd="25dp"
+        android:layout_marginRight="25dp"
+        android:layout_marginBottom="45dp"
+        android:src="@drawable/ic_distance"  />
+    <ImageView
+        android:id="@+id/speed"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginLeft="6dp"
+        android:layout_marginTop="108dp"
+        android:layout_marginEnd="25dp"
+        android:layout_marginRight="25dp"
+        android:layout_marginBottom="45dp"
+        android:src="@drawable/ic_speed" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="101dp"
+        android:layout_height="35dp"
+        android:layout_marginStart="115dp"
+        android:layout_marginLeft="6dp"
+        android:layout_marginTop="105dp"
+        android:layout_marginEnd="25dp"
+        android:layout_marginRight="25dp"
+        android:layout_marginBottom="45dp"
+        android:gravity="center"
+        android:text="29-05-2020"
+        android:textColor="#8FFFFFFF"
+        android:textSize="15dp"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/durationtxt"
+        android:layout_width="101dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="55dp"
+        android:layout_marginLeft="6dp"
+        android:layout_marginTop="68dp"
+        android:layout_marginEnd="25dp"
+        android:layout_marginRight="25dp"
+        android:layout_marginBottom="45dp"
+        android:text="00:23:02"
+        android:textColor="#FFF"
+        android:textSize="15dp" />
+
+    <TextView
+        android:id="@+id/distancetxt"
+        android:layout_width="101dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="55dp"
+        android:layout_marginLeft="6dp"
+        android:layout_marginTop="88dp"
+        android:layout_marginEnd="25dp"
+        android:layout_marginRight="25dp"
+        android:layout_marginBottom="45dp"
+        android:text="2.221 km"
+        android:textColor="#FFF"
+        android:textSize="15dp" />
+
+    <TextView
+        android:id="@+id/speedtxt"
+        android:layout_width="101dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="55dp"
+        android:layout_marginLeft="6dp"
+        android:layout_marginTop="108dp"
+        android:layout_marginEnd="25dp"
+        android:layout_marginRight="25dp"
+        android:layout_marginBottom="45dp"
+        android:text="15 km/h"
+        android:textColor="#FFF"
+        android:textSize="15dp" />
+</androidx.cardview.widget.CardView>
+
+</RelativeLayout>
