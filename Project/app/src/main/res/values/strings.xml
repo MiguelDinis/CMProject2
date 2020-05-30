@@ -13,6 +13,8 @@
     <string name="heightEdit">176</string>
     <string name="caloriesEdit">500</string>
     <string name="letsGobut">Let\'s Go!</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="appbar_scrolling_view_behavior" translatable="false">com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

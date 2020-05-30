@@ -14,8 +14,7 @@
     <fragment
         android:id="@+id/navigation_map"
         android:name="com.example.cmprojeto.ui.map.MapFragment"
-        android:label="@string/nav_map"
-        tools:layout="@layout/fragment_map" />
+        android:label="@string/nav_map" />
 
     <fragment
         android:id="@+id/navigation_runners"

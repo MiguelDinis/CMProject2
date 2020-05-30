@@ -38,6 +38,12 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     // Google
     implementation 'com.google.android.gms:play-services-auth:18.0.0'
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
+
+    // Google play services for location information
+    implementation 'com.google.android.gms:play-services-location:17.0.0'
+    // Google Maps Services (needed for directions)
+    implementation 'com.google.maps:google-maps-services:0.2.9'
 
     // Firebase
     implementation platform('com.google.firebase:firebase-bom:25.3.1')
