@@ -14,6 +14,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.w3c.dom.Text;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class InitUserConfigs extends AppCompatActivity {
 
@@ -23,7 +26,9 @@ public class InitUserConfigs extends AppCompatActivity {
     private EditText weight;
     private EditText height;
     private EditText calories;
+    private String photoUrl;
     private FirebaseFirestore db;
+    private List<String> list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,12 +40,15 @@ public class InitUserConfigs extends AppCompatActivity {
         weight = findViewById(R.id.weightEdit);
         height = findViewById(R.id.heightEdit);
         calories = findViewById(R.id.caloriesEdit);
+        photoUrl = getIntent().getStringExtra("imgUrl");
         db = FirebaseFirestore.getInstance();
-    }
+        list = new ArrayList<>();
+
+        }
 
     public void letsGoClicked(View v){
-        User newUser = new User(userId,username, Integer.parseInt(weight.getText().toString()),
-                Integer.parseInt(height.getText().toString()),Integer.parseInt(calories.getText().toString()));
+        User newUser = new User(userId, username, Integer.parseInt(weight.getText().toString()),
+                Integer.parseInt(height.getText().toString()), Integer.parseInt(calories.getText().toString()), photoUrl, list);
         //add new user to the db
         db.collection("Users").document(userId).set(newUser);
         startActivity(new Intent(this,MainActivity.class));

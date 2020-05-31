@@ -76,12 +76,18 @@ public class MainActivity extends AppCompatActivity  implements GoogleApiClient.
                         @Override
                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
                             if (task.isSuccessful()) {
+                                if (mFirebaseUser.getPhotoUrl() != null) {
+                                    mPhotoUrl = mFirebaseUser.getPhotoUrl().toString();
+                                }
                                 //If is the first time this user is authenticated
                                 if(task.getResult().size() == 0){
                                     Intent initUserConfig = new Intent(getApplicationContext(), InitUserConfigs.class);
                                     initUserConfig.putExtra("id", userId);
                                     initUserConfig.putExtra("username", mUsername);
+                                    initUserConfig.putExtra("imgUrl", mPhotoUrl);
                                     startActivity(initUserConfig);
+                                }else{
+
                                 }
 
                             } else {
@@ -90,9 +96,6 @@ public class MainActivity extends AppCompatActivity  implements GoogleApiClient.
                         }
                     });
 
-            if (mFirebaseUser.getPhotoUrl() != null) {
-                mPhotoUrl = mFirebaseUser.getPhotoUrl().toString();
-            }
         }
 
         mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -117,6 +120,20 @@ public class MainActivity extends AppCompatActivity  implements GoogleApiClient.
         mUsername = ANONYMOUS;
         startActivity(new Intent(this, SignInActivity.class));
         finish();
+    }
+
+
+
+    public String getUrlPhoto(){
+        return mPhotoUrl;
+    }
+
+    public String getUserName(){
+        return mUsername;
+    }
+
+    public String getUserId(){
+        return userId;
     }
 
 

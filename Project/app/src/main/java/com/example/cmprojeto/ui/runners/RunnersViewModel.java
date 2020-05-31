@@ -10,7 +10,6 @@ public class RunnersViewModel extends ViewModel {
 
     public RunnersViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("This is profile fragment");
     }
 
     public LiveData<String> getText() {
