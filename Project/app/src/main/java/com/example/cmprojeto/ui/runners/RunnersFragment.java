@@ -55,6 +55,7 @@ public class RunnersFragment extends Fragment {
 
         View root = inflater.inflate(R.layout.fragment_runners, container, false);
         qrcodeText = root.findViewById(R.id.qrcodeText);
+        qrcodeText.setText("Friends List");
         recyclerView = (RecyclerView) root.findViewById(R.id.FriendsList);
         // use a linear layout manager
         layoutManager = new LinearLayoutManager(getContext());

@@ -3,6 +3,7 @@ package com.example.cmprojeto.ui.map;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -152,8 +153,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                         ));
                     }
                     Polyline polyline = mMap.addPolyline(new PolylineOptions().addAll(newDecodedPath));
-                    polyline.setColor(ContextCompat.getColor(requireActivity(), R.color.colorPrimaryDark));
-                    polyline.setClickable(true);
+                    try{
+                        polyline.setColor(ContextCompat.getColor(requireActivity(), R.color.colorPrimaryDark));
+                        polyline.setClickable(true);
+                    }catch(IllegalStateException e){
+                        Log.e("MAPFRAGMENT", e.toString());
+                    }
 
                 }
             }
