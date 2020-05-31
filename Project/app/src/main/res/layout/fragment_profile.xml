@@ -61,4 +61,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <ImageButton
+        android:id="@+id/galleryBut"
+        android:layout_width="62dp"
+        android:layout_height="54dp"
+        android:onClick="onClick"
+        android:src="@android:drawable/ic_menu_gallery"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/userPic"
+        app:layout_constraintTop_toBottomOf="@+id/changePhotoBut" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

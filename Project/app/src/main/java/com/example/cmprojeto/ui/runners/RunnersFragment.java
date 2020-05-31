@@ -2,6 +2,8 @@ package com.example.cmprojeto.ui.runners;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -33,6 +35,8 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,6 +52,7 @@ public class RunnersFragment extends Fragment {
     private MainActivity main;
     private String userId;
     private List<String> list;
+    private List<Bitmap> friendsUrls;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -64,16 +69,18 @@ public class RunnersFragment extends Fragment {
         main =  ((MainActivity) this.requireActivity());
         userId = main.getUserId();
         list = new ArrayList<>();
+        friendsUrls = new ArrayList<>();
         DocumentReference docRef = db.collection("Users").document(userId);
         docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 list = (List<String>) documentSnapshot.get("friends");
-                friendsAdapter = new FriendsAdapter(list);
-                // specify an adapter
-                recyclerView.setAdapter(friendsAdapter);
+                getFriendPhotoList(list);
+
             }
+
         });
+
 
 
         FloatingActionButton myFab = (FloatingActionButton) root.findViewById(R.id.addRunner);
@@ -98,17 +105,15 @@ public class RunnersFragment extends Fragment {
             if (result.getContents() == null) {
                 Toast.makeText(getContext(),"Cancelled",Toast.LENGTH_LONG).show();
             } else {
-                updateText(result.getContents());
                 updateFriendsList(result.getContents());
+                getFriendPhotoList(list);
+
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
         }
     }
 
-    private void updateText(String scanCode) {
-        qrcodeText.setText(scanCode);
-    }
 
     private void getFriendsList(){
         DocumentReference docRef = db.collection("Users").document(userId);
@@ -118,6 +123,35 @@ public class RunnersFragment extends Fragment {
                 list = (List<String>) documentSnapshot.get("friends");
             }
         });
+    }
+
+    private void getFriendPhotoList(List<String> friendsList){
+        friendsUrls = new ArrayList<>();
+        for(String x : friendsList){
+            DocumentReference docRef = db.collection("Users").document(x);
+            docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    Picasso.get().load(documentSnapshot.get("mPhotoUrl").toString()).into(new Target() {
+                        @Override
+                        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                            friendsUrls.add(bitmap);
+                            friendsAdapter = new FriendsAdapter(friendsUrls);
+                            recyclerView.setAdapter(friendsAdapter);
+                        }
+
+                        @Override
+                        public void onBitmapFailed(Exception e, Drawable errorDrawable) {
+                        }
+                        @Override
+                        public void onPrepareLoad(Drawable placeHolderDrawable) {
+                        }
+                    });
+                }
+            });
+        }
+
+
     }
 
     private void updateFriendsList(String newFriend){
