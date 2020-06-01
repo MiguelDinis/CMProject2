@@ -1,7 +1,9 @@
 package com.example.ghostrunner.ui.runners;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -19,7 +21,6 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.ghostrunner.FriendsAdapter;
 import com.example.ghostrunner.MainActivity;
 import com.example.ghostrunner.R;
@@ -41,6 +42,8 @@ import com.squareup.picasso.Target;
 import java.util.ArrayList;
 import java.util.List;
 
+import static androidx.core.content.ContextCompat.checkSelfPermission;
+
 
 public class RunnersFragment extends Fragment {
 
@@ -54,6 +57,7 @@ public class RunnersFragment extends Fragment {
     private List<String> list;
     private List<String> friendList;
     private List<Bitmap> friendsUrls;
+    private static final int MY_CAMERA_PERMISSION_CODE = 100;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -96,8 +100,33 @@ public class RunnersFragment extends Fragment {
 
     //Qrcode reader operations
     private void startQRScanner() {
-        IntentIntegrator integrator = new IntentIntegrator(getActivity());
-        integrator.forSupportFragment(RunnersFragment.this).initiateScan();
+        if (checkSelfPermission(getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
+        {
+            requestPermissions(new String[]{Manifest.permission.CAMERA}, MY_CAMERA_PERMISSION_CODE);
+        }else{
+            IntentIntegrator integrator = new IntentIntegrator(getActivity());
+            integrator.forSupportFragment(RunnersFragment.this).initiateScan();
+        }
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults)
+    {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == MY_CAMERA_PERMISSION_CODE)
+        {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
+            {
+                Toast.makeText(getContext(), "camera permission granted", Toast.LENGTH_LONG).show();
+                IntentIntegrator integrator = new IntentIntegrator(getActivity());
+                integrator.forSupportFragment(RunnersFragment.this).initiateScan();
+            }
+            else
+            {
+                Toast.makeText(getContext(), "camera permission denied", Toast.LENGTH_LONG).show();
+            }
+        }
     }
 
     @Override
@@ -134,6 +163,7 @@ public class RunnersFragment extends Fragment {
             docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                 @Override
                 public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    if (documentSnapshot.get("mPhotoUrl") != null){
                     Picasso.get().load(documentSnapshot.get("mPhotoUrl").toString()).into(new Target() {
                         @Override
                         public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
@@ -148,7 +178,7 @@ public class RunnersFragment extends Fragment {
                         @Override
                         public void onPrepareLoad(Drawable placeHolderDrawable) {
                         }
-                    });
+                    });}
                 }
             });
         }

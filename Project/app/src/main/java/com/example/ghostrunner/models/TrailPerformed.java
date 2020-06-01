@@ -6,12 +6,12 @@ public class TrailPerformed {
     private String id;
     private String userId;
     private String trailId;
-    private Date performedDate;
+    private String performedDate;
     private String velocity;
     private String duration;
 
 
-    public TrailPerformed(String id, String userId, String trailId, String duration,String velocity, Date performedDate) {
+    public TrailPerformed(String id, String userId, String trailId, String duration,String velocity, String performedDate) {
         this.id = id;
         this.userId = userId;
         this.trailId = trailId;
@@ -32,7 +32,7 @@ public class TrailPerformed {
         return trailId;
     }
 
-    public Date getPerformedDate() {
+    public String getPerformedDate() {
         return performedDate;
     }
 

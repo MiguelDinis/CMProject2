@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="220dp"
+    android:layout_height="145dp"
+    android:layout_marginLeft="9dp"
+    android:background="@drawable/round">
+    <androidx.cardview.widget.CardView
+        card_view:cardCornerRadius="20dp"
+        card_view:cardElevation="0dp"
+        android:layout_width="220dp"
+        android:layout_height="145dp">
+
+        <ImageView
+            android:id="@+id/trailPhoto"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/round2"
+            android:tint="#40000000"/>
+
+    </androidx.cardview.widget.CardView>
+
+</RelativeLayout>

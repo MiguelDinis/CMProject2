@@ -4,15 +4,16 @@ import java.util.Date;
 
 public class Trail {
 
-    String id;
+    private String id;
+    private String userId;
     private String trailName;
     private String address;
     private String description;
     private String distance;
-    private Date CreatedDate;
+    private String CreatedDate;
     private String urlPhoto;
 
-    public Trail(String id, String trailName, String address, String description, String duration, String distance, String velocity, Date CreatedDate, String urlPhoto) {
+    public Trail(String id, String userId, String trailName, String address, String description, String distance,String CreatedDate, String urlPhoto) {
         this.id = id;
         this.trailName = trailName;
         this.address = address;
@@ -20,6 +21,7 @@ public class Trail {
         this.distance = distance;
         this.CreatedDate = CreatedDate;
         this.urlPhoto = urlPhoto;
+        this.userId = userId;
     }
 
     public String getId() {
@@ -44,11 +46,15 @@ public class Trail {
     }
 
 
-    public Date getDate() {
+    public String getDate() {
         return CreatedDate;
     }
 
     public String getUrlPhoto() {
         return urlPhoto;
+    }
+
+    public String getUserId(){
+        return userId;
     }
 }
