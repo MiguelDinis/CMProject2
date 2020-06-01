@@ -1,4 +1,4 @@
-package com.example.cmprojeto.ui.home;
+package com.example.ghostrunner.ui.home;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,7 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
-import com.example.cmprojeto.R;
+import com.example.ghostrunner.R;
 
 public class HomeFragment extends Fragment {
 

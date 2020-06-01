@@ -1,4 +1,4 @@
-package com.example.cmprojeto.ui.profile;
+package com.example.ghostrunner.ui.profile;
 
 import android.Manifest;
 import android.app.Activity;
@@ -23,8 +23,8 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 
-import com.example.cmprojeto.MainActivity;
-import com.example.cmprojeto.R;
+import com.example.ghostrunner.MainActivity;
+import com.example.ghostrunner.R;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;

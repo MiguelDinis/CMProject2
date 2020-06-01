@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:473573039477:android:9fc964f5fc24383106c73c",
         "android_client_info": {
-          "package_name": "com.example.cmprojeto"
+          "package_name": "com.example.ghostrunner"
         }
       },
       "oauth_client": [
@@ -18,7 +18,7 @@
           "client_id": "473573039477-n8p768qj4te9c6d4728tb3c4no4d6ec7.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.cmprojeto",
+            "package_name": "com.example.ghostrunner",
             "certificate_hash": "b23a7ada3dea2ce3f646a0bd52fdd7eb3c709621"
           }
         },
@@ -26,7 +26,7 @@
           "client_id": "473573039477-hrgvhq5p7oqdr8qopvhqj03fj674dtd1.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.cmprojeto",
+            "package_name": "com.example.ghostrunner",
             "certificate_hash": "a2d71d0fb13ac0cfc76260eff8279929f2ebdc83"
           }
         },

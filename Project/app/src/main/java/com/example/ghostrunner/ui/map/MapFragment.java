@@ -1,4 +1,4 @@
-package com.example.cmprojeto.ui.map;
+package com.example.ghostrunner.ui.map;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -13,9 +13,9 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.example.cmprojeto.HorizontalRecyclerViewAdapter;
-import com.example.cmprojeto.ImageModel;
-import com.example.cmprojeto.R;
+import com.example.ghostrunner.HorizontalRecyclerViewAdapter;
+import com.example.ghostrunner.ImageModel;
+import com.example.ghostrunner.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;

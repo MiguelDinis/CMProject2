@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.cmprojeto.firebase;
+package com.example.ghostrunner.firebase;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -24,8 +24,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.cmprojeto.MainActivity;
-import com.example.cmprojeto.R;
+import com.example.ghostrunner.MainActivity;
+import com.example.ghostrunner.R;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;

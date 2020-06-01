@@ -1,4 +1,4 @@
-package com.example.cmprojeto;
+package com.example.ghostrunner;
 
 import android.graphics.Bitmap;
 import android.view.LayoutInflater;

@@ -1,4 +1,4 @@
-package com.example.cmprojeto.ui.runners;
+package com.example.ghostrunner.ui.runners;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

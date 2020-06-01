@@ -1,4 +1,4 @@
-package com.example.cmprojeto.ui.runners;
+package com.example.ghostrunner.ui.runners;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -20,9 +20,9 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.cmprojeto.FriendsAdapter;
-import com.example.cmprojeto.MainActivity;
-import com.example.cmprojeto.R;
+import com.example.ghostrunner.FriendsAdapter;
+import com.example.ghostrunner.MainActivity;
+import com.example.ghostrunner.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;

@@ -1,4 +1,4 @@
-package com.example.cmprojeto.models;
+package com.example.ghostrunner.models;
 
 import java.util.Date;
 

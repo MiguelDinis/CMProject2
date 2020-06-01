@@ -1,10 +1,10 @@
-package com.example.cmprojeto;
+package com.example.ghostrunner;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
-import com.example.cmprojeto.firebase.SignInActivity;
+import com.example.ghostrunner.firebase.SignInActivity;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;

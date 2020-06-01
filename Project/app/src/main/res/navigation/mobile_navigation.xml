@@ -7,23 +7,23 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="com.example.cmprojeto.ui.home.HomeFragment"
+        android:name="com.example.ghostrunner.ui.home.HomeFragment"
         android:label="@string/nav_home"
         tools:layout="@layout/fragment_home" />
 
     <fragment
         android:id="@+id/navigation_map"
-        android:name="com.example.cmprojeto.ui.map.MapFragment"
+        android:name="com.example.ghostrunner.ui.map.MapFragment"
         android:label="@string/nav_map" />
 
     <fragment
         android:id="@+id/navigation_runners"
-        android:name="com.example.cmprojeto.ui.runners.RunnersFragment"
+        android:name="com.example.ghostrunner.ui.runners.RunnersFragment"
         android:label="@string/nav_runners"
         tools:layout="@layout/fragment_runners" />
     <fragment
         android:id="@+id/navigation_profile"
-        android:name="com.example.cmprojeto.ui.profile.ProfileFragment"
+        android:name="com.example.ghostrunner.ui.profile.ProfileFragment"
         android:label="@string/nav_profile"
         tools:layout="@layout/fragment_profile" />
 
