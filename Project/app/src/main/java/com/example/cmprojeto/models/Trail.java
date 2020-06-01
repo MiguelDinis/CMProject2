@@ -8,20 +8,18 @@ public class Trail {
     private String trailName;
     private String address;
     private String description;
-    private String duration;
     private String distance;
-    private String velocity;
-    private Date date;
+    private Date CreatedDate;
+    private String urlPhoto;
 
-    public Trail(String id, String trailName, String address, String description, String duration, String distance, String velocity, Date date) {
+    public Trail(String id, String trailName, String address, String description, String duration, String distance, String velocity, Date CreatedDate, String urlPhoto) {
         this.id = id;
         this.trailName = trailName;
         this.address = address;
         this.description = description;
-        this.duration = duration;
         this.distance = distance;
-        this.velocity = velocity;
-        this.date = date;
+        this.CreatedDate = CreatedDate;
+        this.urlPhoto = urlPhoto;
     }
 
     public String getId() {
@@ -40,19 +38,17 @@ public class Trail {
         return description;
     }
 
-    public String getDuration() {
-        return duration;
-    }
 
     public String getDistance() {
         return distance;
     }
 
-    public String getVelocity() {
-        return velocity;
-    }
 
     public Date getDate() {
-        return date;
+        return CreatedDate;
+    }
+
+    public String getUrlPhoto() {
+        return urlPhoto;
     }
 }

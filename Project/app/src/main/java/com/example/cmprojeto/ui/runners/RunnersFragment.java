@@ -52,6 +52,7 @@ public class RunnersFragment extends Fragment {
     private MainActivity main;
     private String userId;
     private List<String> list;
+    private List<String> friendList;
     private List<Bitmap> friendsUrls;
 
 
@@ -69,6 +70,7 @@ public class RunnersFragment extends Fragment {
         main =  ((MainActivity) this.requireActivity());
         userId = main.getUserId();
         list = new ArrayList<>();
+        friendList = new ArrayList<>();
         friendsUrls = new ArrayList<>();
         DocumentReference docRef = db.collection("Users").document(userId);
         docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -154,14 +156,40 @@ public class RunnersFragment extends Fragment {
 
     }
 
-    private void updateFriendsList(String newFriend){
+    //Update the friends to the two persons.
+    private void updateFriendsList(final String newFriend){
         list.add(newFriend);
         DocumentReference docRef = db.collection("Users").document(userId);
         docRef.update("friends", list)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
+
                         Log.d("RunnersFragment", "DocumentSnapshot successfully updated!");
+                        DocumentReference friendRef = db.collection("Users").document(newFriend);
+                        friendRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            @Override
+                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+
+                                friendList = (List<String>) documentSnapshot.get("friends");
+                                friendList.add(userId);
+                                DocumentReference friendRef2 = db.collection("Users").document(newFriend);
+                                friendRef2.update("friends", friendList)
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+
+                                                Log.d("RunnersFragment", "DocumentSnapshot successfully updated!");
+                                            }
+                                        })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Log.w("RunnersFragment", "Error updating document", e);
+                                            }
+                                        });
+                            }
+                        });
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -170,6 +198,8 @@ public class RunnersFragment extends Fragment {
                         Log.w("RunnersFragment", "Error updating document", e);
                     }
                 });
+
+
     }
 
 }
