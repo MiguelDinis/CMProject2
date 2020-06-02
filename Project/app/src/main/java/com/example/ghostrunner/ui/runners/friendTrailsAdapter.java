@@ -18,7 +18,7 @@ import java.util.List;
 
 
 public class friendTrailsAdapter extends RecyclerView.Adapter<friendTrailsAdapter.MyViewHolder> {
-    private List<Trail> mDataset;
+    private List<String> mDataset;
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         // each data item is just a string in this case
         public TextView textView;
@@ -30,7 +30,7 @@ public class friendTrailsAdapter extends RecyclerView.Adapter<friendTrailsAdapte
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public friendTrailsAdapter(List<Trail> myDataset) {
+    public friendTrailsAdapter(List<String> myDataset) {
         mDataset = myDataset;
     }
 
@@ -50,7 +50,7 @@ public class friendTrailsAdapter extends RecyclerView.Adapter<friendTrailsAdapte
 
     @Override
     public void onBindViewHolder(@NonNull friendTrailsAdapter.MyViewHolder holder, int position) {
-        holder.textView.setText(mDataset.get(position).getTrailName());
+        holder.textView.setText(mDataset.get(position));
 
     }
 

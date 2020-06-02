@@ -49,7 +49,7 @@ public class FriendPage extends Fragment implements View.OnClickListener {
     private friendTrailsAdapter friendTrailsAdapter;
     private RecyclerView recyclerView;
     private LinearLayoutManager layoutManager;
-    private List<Trail> friendTrailsList;
+    private List<String> friendTrailsList;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -67,7 +67,7 @@ public class FriendPage extends Fragment implements View.OnClickListener {
         layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
         String value = getArguments().getString("id");
-        friendTrailsList = new ArrayList<Trail>();
+        friendTrailsList = new ArrayList<String>();
 
 
         userRef = db.collection("Users").document(value);
@@ -91,8 +91,8 @@ public class FriendPage extends Fragment implements View.OnClickListener {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                Trail trail = document.toObject(Trail.class);
-                                friendTrailsList.add(trail);
+                                //Trail trail = document.toObject(Trail.class);
+                                friendTrailsList.add("Name: "+ document.get("trailName").toString());
                                 friendTrailsAdapter = new friendTrailsAdapter(friendTrailsList);
                                 recyclerView.setAdapter(friendTrailsAdapter);
                             }

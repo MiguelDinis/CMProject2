@@ -57,6 +57,7 @@ public class RunnersFragment extends Fragment {
     private List<String> list;
     private List<String> friendList;
     private List<Bitmap> friendsUrls;
+    private List<String> friendsNames;
     private static final int MY_CAMERA_PERMISSION_CODE = 100;
 
 
@@ -76,6 +77,7 @@ public class RunnersFragment extends Fragment {
         list = new ArrayList<>();
         friendList = new ArrayList<>();
         friendsUrls = new ArrayList<>();
+        friendsNames = new ArrayList<>();
         DocumentReference docRef = db.collection("Users").document(userId);
         docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -158,17 +160,19 @@ public class RunnersFragment extends Fragment {
 
     private void getFriendPhotoList(final List<String> friendsList){
         friendsUrls = new ArrayList<>();
+        friendsNames = new ArrayList<>();
         for(String x : friendsList){
             DocumentReference docRef = db.collection("Users").document(x);
             docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                 @Override
                 public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    friendsNames.add(documentSnapshot.get("userName").toString());
                     if (documentSnapshot.get("mPhotoUrl") != null){
                     Picasso.get().load(documentSnapshot.get("mPhotoUrl").toString()).into(new Target() {
                         @Override
                         public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
                             friendsUrls.add(bitmap);
-                            friendsAdapter = new FriendsAdapter(friendsUrls, friendsList);
+                            friendsAdapter = new FriendsAdapter(friendsUrls, friendsList, friendsNames);
                             recyclerView.setAdapter(friendsAdapter);
                         }
 

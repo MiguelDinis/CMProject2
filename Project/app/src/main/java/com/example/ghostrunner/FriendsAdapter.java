@@ -23,6 +23,7 @@ import java.util.List;
 public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.MyViewHolder> {
     private List<Bitmap> mDataset;
     private List<String> ids;
+    private List<String> names;
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
@@ -30,16 +31,19 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.MyViewHo
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         // each data item is just a string in this case
         public  ImageView imageView;;
+        public TextView textView;
         public MyViewHolder(View v) {
             super(v);
             imageView = (ImageView) v.findViewById(R.id.runnerPhoto);
+            textView = v.findViewById(R.id.friendNameCard);
         }
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public FriendsAdapter(List<Bitmap> myDataset, List<String> friendsIds) {
+    public FriendsAdapter(List<Bitmap> myDataset, List<String> friendsIds, List<String> MyNames) {
         mDataset = myDataset;
         ids = friendsIds;
+        names = MyNames;
 
     }
 
@@ -59,6 +63,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.MyViewHo
         // - replace the contents of the view with that element
 
         holder.imageView.setImageBitmap(mDataset.get(position));
+        holder.textView.setText(names.get(position));
 
         holder.imageView.setOnClickListener(new View.OnClickListener() {
             @Override

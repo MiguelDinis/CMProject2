@@ -99,4 +99,32 @@ public class Trail {
     public List<LatLng> getTrailPoints() {
         return trailPoints;
     }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setCreatedDate(String createdDate) {
+        CreatedDate = createdDate;
+    }
+
+    public void setUrlPhoto(String urlPhoto) {
+        this.urlPhoto = urlPhoto;
+    }
+
+    public void setCoordStart(GeoPoint coordStart) {
+        this.coordStart = coordStart;
+    }
+
+    public void setCoordEnd(GeoPoint coordEnd) {
+        this.coordEnd = coordEnd;
+    }
+
+    public void setTrailPoints(List<LatLng> trailPoints) {
+        this.trailPoints = trailPoints;
+    }
 }

@@ -22,6 +22,22 @@
             android:src="@drawable/round2"
             android:tint="#40000000"/>
 
+        <TextView
+            android:id="@+id/friendNameCard"
+            android:layout_width="173dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="0dp"
+            android:layout_marginLeft="0dp"
+            android:layout_marginTop="50dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginRight="0dp"
+            android:layout_marginBottom="0dp"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:textColor="#FFF"
+            android:textSize="20dp"
+            android:textStyle="bold" />
+
     </androidx.cardview.widget.CardView>
 
 </RelativeLayout>

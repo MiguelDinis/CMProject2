@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#19227E"
     tools:context=".ui.profile.ProfileFragment">
 
     <Button
@@ -13,8 +14,8 @@
         android:layout_marginBottom="32dp"
         android:background="@drawable/button_bg_rounded_corners_stop"
         android:drawableLeft="@drawable/ic_power"
-        android:paddingLeft="16.0dp"
         android:onClick="onClick"
+        android:paddingLeft="16.0dp"
         android:text="@string/sign_out"
         android:textColor="#FFF"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -37,6 +38,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:text="mike"
+        android:textColor="#FFFFFF"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -48,8 +50,8 @@
         android:layout_width="54dp"
         android:layout_height="54dp"
         android:layout_marginTop="32dp"
-        android:onClick="onClick"
         android:background="@drawable/button_bg_rounded_corners_add"
+        android:onClick="onClick"
         android:src="@drawable/ic_camera"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -65,7 +67,6 @@
         app:layout_constraintBottom_toTopOf="@+id/but_sign_out"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
 
 
     <ImageButton
