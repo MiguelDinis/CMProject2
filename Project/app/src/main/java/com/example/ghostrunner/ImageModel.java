@@ -1,6 +1,7 @@
 package com.example.ghostrunner;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.firestore.GeoPoint;
 
 import java.io.Serializable;
 
@@ -14,8 +15,8 @@ public class ImageModel implements Serializable {
     private String distance;
     private String speed;
     private String date;
-    private LatLng coordsStart;
-    private LatLng coordsEnd;
+    private GeoPoint coordsStart;
+    private GeoPoint coordsEnd;
 
     public String getId() {
         return id;
@@ -43,11 +44,11 @@ public class ImageModel implements Serializable {
         this.date = date;
     }
 
-    public void setCoordsStart(LatLng coordsStart) {
+    public void setCoordsStart(GeoPoint coordsStart) {
         this.coordsStart = coordsStart;
     }
 
-    public void setCoordsEnd(LatLng coordsEnd) {
+    public void setCoordsEnd(GeoPoint coordsEnd) {
         this.coordsEnd = coordsEnd;
     }
 
@@ -75,11 +76,11 @@ public class ImageModel implements Serializable {
         return date;
     }
 
-    public LatLng getCoordsStart() {
+    public GeoPoint getCoordsStart() {
         return coordsStart;
     }
 
-    public LatLng getCoordsEnd() {
+    public GeoPoint getCoordsEnd() {
         return coordsEnd;
     }
 

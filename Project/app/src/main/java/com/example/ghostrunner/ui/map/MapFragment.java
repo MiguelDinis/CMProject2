@@ -69,6 +69,7 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.maps.DirectionsApiRequest;
@@ -100,7 +101,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, IBaseGp
     private LinearLayoutManager horizontalLayoutManager;
     private Polyline currentPolyline;
     SupportMapFragment mapFragment;
-    static LatLng coordsStart, coordsEnd;
+    static GeoPoint coordsStart, coordsEnd;
 
     TextView txtTimerStopped;
 
@@ -194,8 +195,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, IBaseGp
                                             imageModel0.setDistance(document.get("distance").toString());
                                             imageModel0.setSpeed(document.get("speed").toString());
                                             imageModel0.setDate(document.get("date").toString());
-                                            imageModel0.setCoordsStart(new LatLng(40.048611, -8.890201));
-                                            imageModel0.setCoordsEnd(new LatLng(40.155185, -8.867252));
+                                            imageModel0.setCoordsStart((GeoPoint) document.get("coordStart"));
+                                            imageModel0.setCoordsEnd((GeoPoint) document.get("coordEnd"));
                                             imageModelArrayList.add(imageModel0);
 
                                         }
@@ -345,7 +346,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, IBaseGp
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
-    public static void idPressed (LatLng coordsStart, LatLng coordsEnd) {
+    public static void idPressed (GeoPoint coordsStart, GeoPoint coordsEnd) {
 
         MapFragment mapF = new MapFragment();
         MapFragment.coordsStart = coordsStart;
@@ -356,9 +357,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, IBaseGp
     public void  showTrail()
     {
         mMap.clear();
-
-        place1 = new MarkerOptions().position(coordsStart).title("Location 1");
-        place2 = new MarkerOptions().position(coordsEnd).title("Location 2");
+        double lat1 = coordsStart.getLatitude();
+        double lng1 = coordsStart.getLongitude ();
+        LatLng latLng1 = new LatLng(lat1, lng1);
+        double lat2 = coordsEnd.getLatitude();
+        double lng2 = coordsEnd.getLongitude ();
+        LatLng latLng2 = new LatLng(lat2, lng2);
+        place1 = new MarkerOptions().position(latLng1).title("Location 1");
+        place2 = new MarkerOptions().position(latLng2).title("Location 2");
 
         place1.icon(BitmapDescriptorFactory.fromResource(R.drawable.start));
         place2.icon(BitmapDescriptorFactory.fromResource(R.drawable.finish));
