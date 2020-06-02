@@ -3,6 +3,8 @@ package com.example.ghostrunner;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Toast;
 import com.example.ghostrunner.firebase.SignInActivity;
 import com.example.ghostrunner.models.Trail;
@@ -53,6 +55,7 @@ public class MainActivity extends AppCompatActivity  implements GoogleApiClient.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
         BottomNavigationView navView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
