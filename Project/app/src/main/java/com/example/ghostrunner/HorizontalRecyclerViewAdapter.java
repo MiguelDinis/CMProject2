@@ -8,7 +8,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.ghostrunner.ui.map.MapFragment;
 
 import java.util.ArrayList;
 
@@ -43,7 +46,8 @@ public class HorizontalRecyclerViewAdapter extends RecyclerView.Adapter<Horizont
             @Override
             public void onClick(View v) {
 
-                Toast.makeText(context, model.getImageName()+" - "+position, Toast.LENGTH_SHORT).show();
+                MapFragment.idPressed(model.getCoordsStart(), model.getCoordsEnd());
+                //Toast.makeText(context, model.getImageName()+" - "+position, Toast.LENGTH_SHORT).show();
             }
         });
     }
