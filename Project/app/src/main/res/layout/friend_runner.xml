@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="220dp"
     android:layout_height="145dp"
-    android:layout_marginLeft="9dp"
+    android:layout_marginLeft="80dp"
+    android:layout_marginRight="80dp"
+    android:layout_centerVertical="true"
     android:background="@drawable/round">
     <androidx.cardview.widget.CardView
         card_view:cardCornerRadius="20dp"
