@@ -67,7 +67,10 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -83,6 +86,8 @@ import com.squareup.picasso.Target;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import de.nitri.gauge.Gauge;
 
@@ -170,60 +175,22 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, IBaseGp
         gauge.setVisibility(View.INVISIBLE);
         getLocationPermission();
 
+        //Get friends list
+        DocumentReference docRef = db.collection("Users").document(userId);
+        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                List<String> trailsToShow = (List<String>) documentSnapshot.get("friends");
+                if(trailsToShow == null){
+                    trailsToShow = new ArrayList<String>();
+                    trailsToShow.add(userId);
+                }else{
+                    trailsToShow.add(userId);
+                    updateTrailList(trailsToShow);
+                }
+            }
 
-
-
-        trails = new ArrayList<>();
-        db.collection("Trails")
-                .whereEqualTo("id", userId)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (final QueryDocumentSnapshot document : task.getResult()) {
-                                Picasso.get().load(document.get("urlPhoto").toString()).into(new Target() {
-                                    @Override
-                                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                                        Log.i(TAG,bitmap.toString());
-                                        trails.add(bitmap);
-                                        for (Bitmap bit : trails){
-                                            ImageModel imageModel0 = new ImageModel();
-                                            imageModel0.setId(document.get("id").toString());
-                                            imageModel0.setTrailName(document.get("trailName").toString());
-                                            //imageModel0.setDuration(document.get("duration").toString());
-                                            imageModel0.setDistance(document.get("distance").toString());
-                                            //imageModel0.setSpeed(document.get("speed").toString());
-                                            imageModel0.setDate(document.get("date").toString());
-                                            imageModel0.setCoordsStart((GeoPoint) document.get("coordStart"));
-                                            imageModel0.setCoordsEnd((GeoPoint) document.get("coordEnd"));
-                                            imageModelArrayList.add(imageModel0);
-
-                                        }
-                                        mHorizontalRecyclerView = (RecyclerView) root.findViewById(R.id.horizontalRecyclerView);
-                                        horizontalAdapter = new HorizontalRecyclerViewAdapter(imageModelArrayList,trails, getContext());
-                                        horizontalLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-                                        mHorizontalRecyclerView.setLayoutManager(horizontalLayoutManager);
-                                        mHorizontalRecyclerView.setAdapter((RecyclerView.Adapter) horizontalAdapter);
-                                    }
-
-                                    @Override
-                                    public void onBitmapFailed(Exception e, Drawable errorDrawable) {
-                                    }
-                                    @Override
-                                    public void onPrepareLoad(Drawable placeHolderDrawable) {
-                                    }
-                                });
-
-                            }
-                        } else {
-                            Log.d(TAG, "Error getting documents: ", task.getException());
-                        }
-                    }
-                });
-
-
-
+        });
 
 
         LocationManager locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
@@ -244,8 +211,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, IBaseGp
                 MapFragment.this.updateSpeed(null);
             }
         });
-
-
 
 
         txtTimer.setVisibility(View.INVISIBLE);
@@ -338,6 +303,59 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, IBaseGp
                     .build();
         }
         return root;
+    }
+
+    public void updateTrailList(List<String> trailsToShow){
+        trails = new ArrayList<>();
+        for(String trail : trailsToShow){
+            db.collection("Trails")
+                    .whereEqualTo("id", trail)
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                for (final QueryDocumentSnapshot document : task.getResult()) {
+                                    Picasso.get().load(document.get("urlPhoto").toString()).into(new Target() {
+                                        @Override
+                                        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                                            Log.i(TAG,bitmap.toString());
+                                            trails.add(bitmap);
+                                            for (Bitmap bit : trails){
+                                                ImageModel imageModel0 = new ImageModel();
+                                                imageModel0.setId(document.get("id").toString());
+                                                imageModel0.setTrailName(document.get("trailName").toString());
+                                                //imageModel0.setDuration(document.get("duration").toString());
+                                                imageModel0.setDistance(document.get("distance").toString());
+                                                //imageModel0.setSpeed(document.get("speed").toString());
+                                                imageModel0.setDate(document.get("date").toString());
+                                                imageModel0.setCoordsStart((GeoPoint) document.get("coordStart"));
+                                                imageModel0.setCoordsEnd((GeoPoint) document.get("coordEnd"));
+                                                imageModelArrayList.add(imageModel0);
+
+                                            }
+                                            mHorizontalRecyclerView = (RecyclerView) root.findViewById(R.id.horizontalRecyclerView);
+                                            horizontalAdapter = new HorizontalRecyclerViewAdapter(imageModelArrayList,trails, getContext());
+                                            horizontalLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+                                            mHorizontalRecyclerView.setLayoutManager(horizontalLayoutManager);
+                                            mHorizontalRecyclerView.setAdapter((RecyclerView.Adapter) horizontalAdapter);
+                                        }
+
+                                        @Override
+                                        public void onBitmapFailed(Exception e, Drawable errorDrawable) {
+                                        }
+                                        @Override
+                                        public void onPrepareLoad(Drawable placeHolderDrawable) {
+                                        }
+                                    });
+
+                                }
+                            } else {
+                                Log.d(TAG, "Error getting documents: ", task.getException());
+                            }
+                        }
+                    });
+        }
     }
     private void swapFragment(){
         DescriptionFragment descriptionFragment = new DescriptionFragment();
