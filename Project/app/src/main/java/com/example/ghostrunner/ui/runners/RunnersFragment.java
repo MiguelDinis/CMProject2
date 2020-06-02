@@ -156,7 +156,7 @@ public class RunnersFragment extends Fragment {
         });
     }
 
-    private void getFriendPhotoList(List<String> friendsList){
+    private void getFriendPhotoList(final List<String> friendsList){
         friendsUrls = new ArrayList<>();
         for(String x : friendsList){
             DocumentReference docRef = db.collection("Users").document(x);
@@ -168,7 +168,7 @@ public class RunnersFragment extends Fragment {
                         @Override
                         public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
                             friendsUrls.add(bitmap);
-                            friendsAdapter = new FriendsAdapter(friendsUrls);
+                            friendsAdapter = new FriendsAdapter(friendsUrls, friendsList);
                             recyclerView.setAdapter(friendsAdapter);
                         }
 

@@ -57,6 +57,7 @@ public class HorizontalRecyclerViewAdapter extends RecyclerView.Adapter<Horizont
             public void onClick(View v) {
 
                 MapFragment.idPressed(model.getCoordsStart(), model.getCoordsEnd());
+
                 //Toast.makeText(context, model.getImageName()+" - "+position, Toast.LENGTH_SHORT).show();
             }
         });

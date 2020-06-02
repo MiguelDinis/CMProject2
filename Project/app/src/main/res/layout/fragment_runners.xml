@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/runnersFragment"
     tools:context=".ui.runners.RunnersFragment">
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -16,6 +17,7 @@
         android:clickable="true"
         android:src="@drawable/ic_addd"
         app:backgroundTint="#2196F3"
+        app:elevation="0dp"
         app:fabSize="auto"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

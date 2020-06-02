@@ -29,6 +29,8 @@ public class Trail {
         this.coordEnd = coordEnd;
     }
 
+    public Trail(){}
+
     public String getId() {
         return id;
     }
