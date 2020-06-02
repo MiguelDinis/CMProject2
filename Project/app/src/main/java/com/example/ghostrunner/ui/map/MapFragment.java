@@ -406,9 +406,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, IBaseGp
         mMap.addMarker(place2);
         mMap.setMapType(mMap.MAP_TYPE_SATELLITE);
         CameraPosition cameraPosition = new CameraPosition.Builder().
-                target(new LatLng(40.048611, -8.890201)).
+                target(latLng1).
                 tilt(60).
-                zoom(12).
+                zoom(18).
                 bearing(20).
                 build();
 
