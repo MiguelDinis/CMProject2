@@ -1,8 +1,10 @@
 package com.example.ghostrunner.models;
 
 import com.google.firebase.firestore.GeoPoint;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.util.Date;
+import java.util.List;
 
 public class Trail {
 
@@ -13,11 +15,11 @@ public class Trail {
     private String distance;
     private String CreatedDate;
     private String urlPhoto;
-    private GeoPoint coordEnd;
     private GeoPoint coordStart;
+    private GeoPoint coordEnd;
+    private List<LatLng> trailPoints;
 
-
-    public Trail(String id, String trailName, String address, String description, String distance,String CreatedDate, String urlPhoto,GeoPoint coordEnd, GeoPoint coordStart ) {
+    public Trail(String id, String trailName, String address, String description, String distance,String CreatedDate, String urlPhoto,GeoPoint coordStart, GeoPoint coordEnd,List<LatLng> trailPoints ) {
         this.id = id;
         this.trailName = trailName;
         this.address = address;
@@ -27,9 +29,34 @@ public class Trail {
         this.urlPhoto = urlPhoto;
         this.coordStart = coordStart;
         this.coordEnd = coordEnd;
+        this.trailPoints = trailPoints;
+
+    }
+    public Trail(){}
+
+    public void setId(String id) {
+        this.id = id;
+    }
+    public void setTrailName(String trailName) {
+        this.trailName = trailName;
     }
 
-    public Trail(){}
+
+
+    public void setDistance(String distance) {
+        this.distance = distance;
+    }
+
+
+
+    public void setCoordsStart(GeoPoint coordsStart) {
+        this.coordStart = coordsStart;
+    }
+
+    public void setCoordsEnd(GeoPoint coordsEnd) {
+        this.coordEnd = coordsEnd;
+    }
+
 
     public String getId() {
         return id;
@@ -67,5 +94,9 @@ public class Trail {
 
     public GeoPoint getCoordStart() {
         return coordStart;
+    }
+
+    public List<LatLng> getTrailPoints() {
+        return trailPoints;
     }
 }
