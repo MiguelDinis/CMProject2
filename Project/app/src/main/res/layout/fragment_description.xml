@@ -15,6 +15,7 @@
         android:layout_marginBottom="16dp"
         android:background="@drawable/button_bg_rounded_corners_add"
         android:drawableLeft="@drawable/ic_check"
+        android:onClick="onClick"
         android:padding="10dp"
         android:paddingLeft="24.0dp"
         android:text="Add Trail"
@@ -36,46 +37,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageButton
-        android:id="@+id/changePhotoBut"
-        android:layout_width="54dp"
-        android:layout_height="54dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="52dp"
-        android:layout_marginRight="52dp"
-        android:background="@drawable/button_bg_rounded_corners_add"
-        android:onClick="onClick"
-        android:src="@drawable/ic_camera"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/userPic"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageButton
-        android:id="@+id/galleryBut"
-        android:layout_width="54dp"
-        android:layout_height="54dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="52dp"
-        android:layout_marginRight="52dp"
-        android:background="@drawable/button_bg_rounded_corners"
-        android:onClick="onClick"
-        android:src="@drawable/ic_image"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/userPic"
-        app:layout_constraintTop_toBottomOf="@+id/changePhotoBut" />
-
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/address"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:hint="ex: Aveiro"
-        android:textColorHint="#FFF"
+        android:hint="@string/trailLocation"
         android:paddingLeft="30dp"
         android:textColor="#fff"
+        android:textColorHint="#FFF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -85,10 +56,10 @@
         android:id="@+id/description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="ex: Hard Trail"
+        android:hint="@string/trailDescription"
         android:paddingLeft="30dp"
-        android:textColorHint="#FFF"
         android:textColor="#fff"
+        android:textColorHint="#FFF"
         app:layout_constraintBottom_toTopOf="@+id/addBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -142,12 +113,36 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:hint="ex: The Montain Peak"
-        android:textColorHint="#FFF"
+        android:hint="@string/trailName"
         android:paddingLeft="30dp"
         android:textColor="#fff"
+        android:textColorHint="#FFF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+    <ImageButton
+        android:id="@+id/trailGalleryBut"
+        android:layout_width="54dp"
+        android:layout_height="54dp"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/button_bg_rounded_corners"
+        android:src="@drawable/ic_image"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/trailPic"
+        app:layout_constraintTop_toBottomOf="@+id/trailPhotoBut" />
+
+    <ImageButton
+        android:id="@+id/trailPhotoBut"
+        android:layout_width="54dp"
+        android:layout_height="54dp"
+        android:layout_marginTop="32dp"
+        android:background="@drawable/button_bg_rounded_corners_add"
+        android:src="@drawable/ic_camera"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/trailPic"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

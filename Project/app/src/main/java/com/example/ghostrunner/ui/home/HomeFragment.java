@@ -58,7 +58,7 @@ public class HomeFragment extends Fragment {
         trails = new ArrayList<>();
         //Return list of trails created by user
         db.collection("Trails")
-                .whereEqualTo("userId", userId)
+                .whereEqualTo("id", userId)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override

@@ -63,26 +63,28 @@ public class MainActivity extends AppCompatActivity  implements GoogleApiClient.
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
-
+        /*
         //TRAILS TO TEST
         Date c = Calendar.getInstance().getTime();
         SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
         String formattedDate = df.format(c);
+
         trails = new ArrayList<>();
         trails.add(new Trail( "1",  "QMTp3OavCPVSZV5e1G7x5lEugG03",  "Um nome qualquer",  "endereço",  "asdaddas", "1.5km", formattedDate,  "https://contents.mediadecathlon.com/p1427463/640x0/27cr14/trail.jpg?k=3b52640a69d7a4dbb395121267e6ab91"));
         trails.add(new Trail( "2",  "QMTp3OavCPVSZV5e1G7x5lEugG03",  "Um nome qualquer",  "endereço",  "asdaddas", "1.5km", formattedDate,  "https://revistaatletismo.com/wp-content/uploads/2017/11/bast%C3%B5es.jpg"));
         trails.add(new Trail( "3",  "QMTp3OavCPVSZV5e1G7x5lEugG03",  "Um nome qualquer",  "endereço",  "asdaddas", "1.5km", formattedDate,  "https://www.traildozezere.com/uploads/2/1/8/6/21864160/p2_orig.png"));
         trails.add(new Trail( "4",  "QMTp3OavCPVSZV5e1G7x5lEugG03",  "Um nome qualquer",  "endereço",  "asdaddas", "1.5km", formattedDate,  "https://portalbr.akamaized.net/brasil/uploads/2018/02/02123404/shutterstock_501368236-1.jpg"));
-
+           */
         //Initialize Firebase Auth
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseUser = mFirebaseAuth.getCurrentUser();
 
         db = FirebaseFirestore.getInstance();
+        /*
         for(Trail trail : trails){
             db.collection("Trails").document(trail.getId()).set(trail);
         }
-
+           */
         //Populate db
 
 

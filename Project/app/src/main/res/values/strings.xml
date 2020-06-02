@@ -16,6 +16,9 @@
     <string name="letsGobut">Let\'s Go!</string>
     <string name="title_activity_maps">Map</string>
     <string name="mytrails">My Trails</string>
+    <string name="trailName">ex: The Montain Peak</string>
+    <string name="trailLocation">ex: Aveiro</string>
+    <string name="trailDescription">ex: Hard Trail</string>
     <string name="appbar_scrolling_view_behavior" translatable="false">com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior</string>
 
     <!-- TODO: Remove or change this placeholder text -->

@@ -1,19 +1,23 @@
 package com.example.ghostrunner.models;
 
+import com.google.firebase.firestore.GeoPoint;
+
 import java.util.Date;
 
 public class Trail {
 
     private String id;
-    private String userId;
     private String trailName;
     private String address;
     private String description;
     private String distance;
     private String CreatedDate;
     private String urlPhoto;
+    private GeoPoint coordEnd;
+    private GeoPoint coordStart;
 
-    public Trail(String id, String userId, String trailName, String address, String description, String distance,String CreatedDate, String urlPhoto) {
+
+    public Trail(String id, String trailName, String address, String description, String distance,String CreatedDate, String urlPhoto,GeoPoint coordEnd, GeoPoint coordStart ) {
         this.id = id;
         this.trailName = trailName;
         this.address = address;
@@ -21,7 +25,8 @@ public class Trail {
         this.distance = distance;
         this.CreatedDate = CreatedDate;
         this.urlPhoto = urlPhoto;
-        this.userId = userId;
+        this.coordStart = coordStart;
+        this.coordEnd = coordEnd;
     }
 
     public String getId() {
@@ -54,7 +59,11 @@ public class Trail {
         return urlPhoto;
     }
 
-    public String getUserId(){
-        return userId;
+    public GeoPoint getCoordEnd() {
+        return coordEnd;
+    }
+
+    public GeoPoint getCoordStart() {
+        return coordStart;
     }
 }
