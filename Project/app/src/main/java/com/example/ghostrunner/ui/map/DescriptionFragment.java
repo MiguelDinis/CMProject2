@@ -52,10 +52,9 @@ public class DescriptionFragment extends Fragment implements View.OnClickListene
     private static int RESULT_LOAD_IMAGE = 1;
 
 
-    private Button signOutButton;
+    private Button addButton;
     private ImageView userPic;
     private String photoUrl;
-    private String userName;
     private TextView userNameText;
     private ImageButton changePhoto;
     private ImageButton galleryPick;
@@ -72,18 +71,19 @@ public class DescriptionFragment extends Fragment implements View.OnClickListene
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        View root = inflater.inflate(R.layout.fragment_profile, container, false);
+        View root = inflater.inflate(R.layout.fragment_description, container, false);
 
         main =  ((MainActivity) this.requireActivity());
-        signOutButton = (Button) root.findViewById(R.id.but_sign_out);
+        addButton = (Button) root.findViewById(R.id.addBtn);
+
         changePhoto = root.findViewById(R.id.changePhotoBut);
         galleryPick = root.findViewById(R.id.galleryBut);
-        userPic = root.findViewById(R.id.userPic);
-        userNameText = root.findViewById(R.id.userNameText);
-        qrcodeView = root.findViewById(R.id.qrCodeView);
-        signOutButton.setOnClickListener(this);
+        userPic = root.findViewById(R.id.trailPic);
+
+        addButton.setOnClickListener(this);
         changePhoto.setOnClickListener(this);
         galleryPick.setOnClickListener(this);
+
         db = FirebaseFirestore.getInstance();
         userId = main.getUserId();
         docRef = db.collection("Users").document(userId);
@@ -95,8 +95,6 @@ public class DescriptionFragment extends Fragment implements View.OnClickListene
             }
         });
 
-        userName = main.getUserName();
-        userNameText.setText(userName);
 
 
 
@@ -106,7 +104,6 @@ public class DescriptionFragment extends Fragment implements View.OnClickListene
         userImageRef = storageRef.child("users/" +userId);
 
 
-        initQRCode(userId);
 
         return root;
     }
@@ -114,10 +111,10 @@ public class DescriptionFragment extends Fragment implements View.OnClickListene
     @Override
     public void onClick(View v) {
         switch(v.getId()){
-            case R.id.but_sign_out:
-                Activity act = getActivity();
+            case R.id.addBtn:
+                /*Activity act = getActivity();
                 if (act instanceof MainActivity)
-                    ((MainActivity) act).signOutActivated();
+                    ((MainActivity) act).signOutActivated();*/
                 break;
             case R.id.changePhotoBut:
                 if (checkSelfPermission(getContext(),Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
@@ -181,21 +178,6 @@ public class DescriptionFragment extends Fragment implements View.OnClickListene
                 Toast.makeText(getContext(), "Something went wrong", Toast.LENGTH_LONG).show();
             }
 
-        }
-    }
-
-    private void initQRCode(String textToSend) {
-
-        MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
-        try {
-            BitMatrix bitMatrix = multiFormatWriter.encode(textToSend.toString(), BarcodeFormat.QR_CODE, 600, 600);
-            BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
-            Bitmap bitmap = barcodeEncoder.createBitmap(bitMatrix);
-            qrcodeView.setImageBitmap(bitmap);
-            qrcodeView.setVisibility(View.VISIBLE);
-
-        } catch (WriterException e) {
-            e.printStackTrace();
         }
     }
 

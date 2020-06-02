@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#19227E"
     tools:context=".ui.profile.ProfileFragment">
 
     <Button
@@ -25,7 +26,7 @@
         tools:ignore="MissingConstraints" />
 
     <ImageView
-        android:id="@+id/userPic"
+        android:id="@+id/trailPic"
         android:layout_width="177dp"
         android:layout_height="152dp"
         android:layout_marginTop="32dp"
@@ -40,8 +41,10 @@
         android:layout_width="54dp"
         android:layout_height="54dp"
         android:layout_marginTop="32dp"
-        android:onClick="onClick"
+        android:layout_marginEnd="52dp"
+        android:layout_marginRight="52dp"
         android:background="@drawable/button_bg_rounded_corners_add"
+        android:onClick="onClick"
         android:src="@drawable/ic_camera"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -53,6 +56,8 @@
         android:layout_width="54dp"
         android:layout_height="54dp"
         android:layout_marginTop="12dp"
+        android:layout_marginEnd="52dp"
+        android:layout_marginRight="52dp"
         android:background="@drawable/button_bg_rounded_corners"
         android:onClick="onClick"
         android:src="@drawable/ic_image"
@@ -61,82 +66,88 @@
         app:layout_constraintStart_toEndOf="@+id/userPic"
         app:layout_constraintTop_toBottomOf="@+id/changePhotoBut" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="409dp"
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/address"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:layout_editor_absoluteX="1dp"
-        tools:layout_editor_absoluteY="250dp"
-        tools:ignore="MissingConstraints">
+        android:layout_marginTop="24dp"
+        android:hint="ex: Aveiro"
+        android:textColorHint="#FFF"
+        android:paddingLeft="30dp"
+        android:textColor="#fff"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="The Montain Peak"
-            android:paddingLeft="30dp"/>
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="409dp"
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/description"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:layout_editor_absoluteX="1dp"
-        tools:layout_editor_absoluteY="400dp"
-        tools:ignore="MissingConstraints">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Aveiro"
-            android:paddingLeft="30dp"/>
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="409dp"
-        android:layout_height="wrap_content"
-        tools:layout_editor_absoluteX="1dp"
-        tools:layout_editor_absoluteY="533dp"
-        tools:ignore="MissingConstraints">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Hard Trail"
-            android:paddingLeft="30dp"/>
-    </com.google.android.material.textfield.TextInputLayout>
+        android:hint="ex: Hard Trail"
+        android:paddingLeft="30dp"
+        android:textColorHint="#FFF"
+        android:textColor="#fff"
+        app:layout_constraintBottom_toTopOf="@+id/addBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView6"
+        app:layout_constraintVertical_bias="0.182" />
 
     <TextView
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
         android:gravity="center"
         android:text="Trail Name"
+        android:textColor="#fff"
         android:textSize="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteY="223dp" />
+        app:layout_constraintTop_toBottomOf="@+id/trailPic" />
 
     <TextView
         android:id="@+id/textView5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
         android:gravity="center"
-        android:textSize="20dp"
         android:text="Address"
+        android:textColor="#fff"
+        android:textSize="20dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteY="356dp" />
+        app:layout_constraintTop_toBottomOf="@+id/trailname" />
 
     <TextView
         android:id="@+id/textView6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:textSize="20dp"
         android:text="Description"
+        android:textColor="#fff"
+        android:textSize="20dp"
+
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteY="488dp" />
+        app:layout_constraintTop_toBottomOf="@+id/address"
+        tools:ignore="MissingConstraints" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/trailname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:hint="ex: The Montain Peak"
+        android:textColorHint="#FFF"
+        android:paddingLeft="30dp"
+        android:textColor="#fff"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

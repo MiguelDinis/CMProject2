@@ -41,6 +41,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -218,6 +219,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, IBaseGp
             public void onClick(View v) {
                 txtTimerStopped = (TextView) root.findViewById(R.id.timeStoped);
                 txtTimerStopped.setText(txtTimer.getText());
+                swapFragment();
+
+
             }
         });
 
@@ -227,6 +231,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, IBaseGp
                     .build();
         }
         return root;
+    }
+    private void swapFragment(){
+        DescriptionFragment descriptionFragment = new DescriptionFragment();
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.mapFragemnt, descriptionFragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
     }
     public static void idPressed (LatLng coordsStart, LatLng coordsEnd) {
 
