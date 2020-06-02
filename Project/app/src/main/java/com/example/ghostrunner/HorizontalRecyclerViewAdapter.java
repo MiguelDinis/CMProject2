@@ -16,6 +16,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ghostrunner.models.Trail;
 import com.example.ghostrunner.ui.map.MapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.firestore.GeoPoint;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,9 +58,9 @@ public class HorizontalRecyclerViewAdapter extends RecyclerView.Adapter<Horizont
         messageViewHolder.imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                MapFragment.idPressed(model.getCoordStart(), model.getCoordEnd(), model.getTrailPoints());
-                //Toast.makeText(context, model.getImageName()+" - "+position, Toast.LENGTH_SHORT).show();
+               
+                //MapFragment.idPressed(model.getCoordStart(), model.getCoordEnd(), trailPoints);
+                Toast.makeText(context, model.getTrailPoints()+" - "+position, Toast.LENGTH_SHORT).show();
             }
         });
     }

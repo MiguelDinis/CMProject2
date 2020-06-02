@@ -129,6 +129,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, IBaseGp
     Location previousLocation;
     ArrayList<Polyline> polylines;
     ArrayList<LatLng> allLatLngs;
+    ArrayList<GeoPoint> test;
     private boolean onTrack;
     private float speedSum = 0;
     private int speedCount = 0;
@@ -313,6 +314,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, IBaseGp
 
     public void updateTrailList(List<String> trailsToShow){
         trails = new ArrayList<>();
+        test = new ArrayList<>();
+        test.add(new GeoPoint(40.534634634,-8.234634634));
         for(String trail : trailsToShow){
             db.collection("Trails")
                     .whereEqualTo("id", trail)
@@ -331,7 +334,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, IBaseGp
                                                 Trail traill = new Trail(document.get("id").toString(),document.get("trailName").toString(),
                                                         document.get("address").toString(),document.get("description").toString(),document.get("distance").toString(),
                                                         document.get("date").toString(),document.get("urlPhoto").toString(),(GeoPoint) document.get("coordStart"),
-                                                        (GeoPoint) document.get("coordEnd"), (List<LatLng>) document.get("trailPoint"));
+                                                        (GeoPoint) document.get("coordEnd"), (List<GeoPoint>) document.get("trailPoints"));
 
 
                                                 imageModelArrayList.add(traill);

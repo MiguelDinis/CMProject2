@@ -17,9 +17,9 @@ public class Trail {
     private String urlPhoto;
     private GeoPoint coordStart;
     private GeoPoint coordEnd;
-    private List<LatLng> trailPoints;
+    private List<GeoPoint> trailPoints;
 
-    public Trail(String id, String trailName, String address, String description, String distance,String CreatedDate, String urlPhoto,GeoPoint coordStart, GeoPoint coordEnd,List<LatLng> trailPoints ) {
+    public Trail(String id, String trailName, String address, String description, String distance,String CreatedDate, String urlPhoto,GeoPoint coordStart, GeoPoint coordEnd,List<GeoPoint> trailPoints ) {
         this.id = id;
         this.trailName = trailName;
         this.address = address;
@@ -96,7 +96,7 @@ public class Trail {
         return coordStart;
     }
 
-    public List<LatLng> getTrailPoints() {
+    public List<GeoPoint> getTrailPoints() {
         return trailPoints;
     }
 
@@ -124,7 +124,7 @@ public class Trail {
         this.coordEnd = coordEnd;
     }
 
-    public void setTrailPoints(List<LatLng> trailPoints) {
+    public void setTrailPoints(List<GeoPoint> trailPoints) {
         this.trailPoints = trailPoints;
     }
 }

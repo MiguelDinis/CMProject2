@@ -79,6 +79,7 @@ public class DescriptionFragment extends Fragment implements View.OnClickListene
     private LatLng coordStart;
     private LatLng coordEnd;
     private List<LatLng> trailPoints;
+    private List<GeoPoint> trailPointsGeo;
     private double dist;
     private String diststr;
     @Override
@@ -91,7 +92,12 @@ public class DescriptionFragment extends Fragment implements View.OnClickListene
         coordStart = getArguments().getParcelable("CoordStart");
         coordEnd = getArguments().getParcelable("CoordEnd");
         trailPoints = getArguments().getParcelableArrayList("TrailPoints");
-
+        for(int i = 0; i < trailPoints.size(); i++){
+            double lat = trailPoints.get(i).latitude;
+            double lng = trailPoints.get(i).longitude;
+            GeoPoint latLng = new GeoPoint(lat, lng);
+            trailPointsGeo.add(latLng);
+        }
         for(int i = 0; i < trailPoints.size()-1; i++){
             dist += distance(trailPoints.get(i).latitude, trailPoints.get(i).longitude,trailPoints.get(i+1).latitude, trailPoints.get(i+1).longitude,'K' );
         }
@@ -165,7 +171,7 @@ public class DescriptionFragment extends Fragment implements View.OnClickListene
                 String description = trailDescription.getText().toString();
                 if (photoChanged == true){
                     if(photoUrl == null) photoUrl = "https://contents.mediadecathlon.com/p1427463/640x0/27cr14/trail.jpg?k=3b52640a69d7a4dbb395121267e6ab91";
-                    Trail tmpTrail = new Trail(userId, name,  address,  description, diststr, formattedDate,  photoUrl, pointStart, pointEnd,trailPoints);
+                    Trail tmpTrail = new Trail(userId, name,  address,  description, diststr, formattedDate,  photoUrl, pointStart, pointEnd,trailPointsGeo);
                     db.collection("Trails").document().set(tmpTrail);
                     Intent goToHome = new Intent(getContext(),MainActivity.class);
                     startActivity(goToHome);
