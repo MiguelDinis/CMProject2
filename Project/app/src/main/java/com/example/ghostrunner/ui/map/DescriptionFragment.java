@@ -24,6 +24,7 @@ import androidx.fragment.app.Fragment;
 import com.example.ghostrunner.MainActivity;
 import com.example.ghostrunner.R;
 import com.example.ghostrunner.models.Trail;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
@@ -41,6 +42,7 @@ import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import static androidx.core.content.ContextCompat.checkSelfPermission;
 
@@ -70,13 +72,33 @@ public class DescriptionFragment extends Fragment implements View.OnClickListene
     private TextView trailLocation;
     private TextView trailDescription;
     private String date;
-
+    private GeoPoint pointStart;
+    private GeoPoint pointEnd;
+    private String duration;
+    private String speed;
+    private LatLng coordStart;
+    private LatLng coordEnd;
+    private List<LatLng> trailPoints;
+    private double dist;
+    private String diststr;
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
         View root = inflater.inflate(R.layout.fragment_description, container, false);
+        duration = getArguments().getString("Duration");
+        speed = getArguments().getString("Speed");
+        coordStart = getArguments().getParcelable("CoordStart");
+        coordEnd = getArguments().getParcelable("CoordEnd");
+        trailPoints = getArguments().getParcelableArrayList("TrailPoints");
 
+        for(int i = 0; i < trailPoints.size()-1; i++){
+            dist += distance(trailPoints.get(i).latitude, trailPoints.get(i).longitude,trailPoints.get(i+1).latitude, trailPoints.get(i+1).longitude,'K' );
+        }
+        diststr = dist +" km";
+
+        pointStart = new GeoPoint(coordStart.latitude,coordStart.longitude);
+        pointEnd = new GeoPoint(coordEnd.latitude,coordEnd.longitude);
         main =  ((MainActivity) this.requireActivity());
         addButton = (Button) root.findViewById(R.id.addBtn);
 
@@ -108,7 +130,32 @@ public class DescriptionFragment extends Fragment implements View.OnClickListene
 
         return root;
     }
+    private double distance(double lat1, double lon1, double lat2, double lon2, char unit) {
+        double theta = lon1 - lon2;
+        double dist = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2)) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(theta));
+        dist = Math.acos(dist);
+        dist = rad2deg(dist);
+        dist = dist * 60 * 1.1515;
+        if (unit == 'K') {
+            dist = dist * 1.609344;
+        } else if (unit == 'N') {
+            dist = dist * 0.8684;
+        }
+        return (dist);
+    }
+    /*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+    /*::  This function converts decimal degrees to radians             :*/
+    /*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+    private double deg2rad(double deg) {
+        return (deg * Math.PI / 180.0);
+    }
 
+    /*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+    /*::  This function converts radians to decimal degrees             :*/
+    /*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+    private double rad2deg(double rad) {
+        return (rad * 180.0 / Math.PI);
+    }
     @Override
     public void onClick(View v) {
         switch(v.getId()){
@@ -118,7 +165,7 @@ public class DescriptionFragment extends Fragment implements View.OnClickListene
                 String description = trailDescription.getText().toString();
                 if (photoChanged == true){
                     if(photoUrl == null) photoUrl = "https://contents.mediadecathlon.com/p1427463/640x0/27cr14/trail.jpg?k=3b52640a69d7a4dbb395121267e6ab91";
-                    Trail tmpTrail = new Trail(userId, name,  address,  description, "1.5km", formattedDate,  photoUrl, new GeoPoint(40.048511, -8.890201),new GeoPoint(40.255185, -8.890201));
+                    Trail tmpTrail = new Trail(userId, name,  address,  description, diststr, formattedDate,  photoUrl, pointStart, pointEnd,trailPoints);
                     db.collection("Trails").document().set(tmpTrail);
                     Intent goToHome = new Intent(getContext(),MainActivity.class);
                     startActivity(goToHome);

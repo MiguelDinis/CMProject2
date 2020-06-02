@@ -14,6 +14,7 @@ import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.ghostrunner.models.Trail;
 import com.example.ghostrunner.ui.map.MapFragment;
 
 import java.util.ArrayList;
@@ -21,10 +22,10 @@ import java.util.List;
 
 public class HorizontalRecyclerViewAdapter extends RecyclerView.Adapter<HorizontalRecyclerViewAdapter.MessageViewHolder> {
 
-    private ArrayList<ImageModel> imageModelArrayList = new ArrayList<>();
+    private ArrayList<Trail> imageModelArrayList = new ArrayList<>();
     private Context context;
     private List<Bitmap> mDataset;
-    public HorizontalRecyclerViewAdapter(ArrayList<ImageModel> horizontalList,List<Bitmap> myDataset, Context context) {
+    public HorizontalRecyclerViewAdapter(ArrayList<Trail> horizontalList,List<Bitmap> myDataset, Context context) {
         this.imageModelArrayList = horizontalList;
         this.context = context;
         this.mDataset = myDataset;
@@ -42,7 +43,7 @@ public class HorizontalRecyclerViewAdapter extends RecyclerView.Adapter<Horizont
 
     @Override
     public void onBindViewHolder(final MessageViewHolder holder, final int position) {
-        final ImageModel model = imageModelArrayList.get(position);
+        final Trail model = imageModelArrayList.get(position);
         MessageViewHolder messageViewHolder = (MessageViewHolder) holder;
 
         messageViewHolder.imageView.setImageBitmap(mDataset.get(position));
@@ -56,7 +57,7 @@ public class HorizontalRecyclerViewAdapter extends RecyclerView.Adapter<Horizont
             @Override
             public void onClick(View v) {
 
-                MapFragment.idPressed(model.getCoordsStart(), model.getCoordsEnd());
+                MapFragment.idPressed(model.getCoordStart(), model.getCoordEnd(), model.getTrailPoints());
                 //Toast.makeText(context, model.getImageName()+" - "+position, Toast.LENGTH_SHORT).show();
             }
         });

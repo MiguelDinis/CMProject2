@@ -5,9 +5,7 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
-import android.location.Geocoder;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,7 +18,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,15 +25,8 @@ import java.util.Formatter;
 import java.util.Locale;
 
 import android.location.Location;
-import android.location.LocationManager;
-import android.os.Bundle;
-import android.app.Activity;
-import android.content.Context;
-import android.view.Menu;
-import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
@@ -50,13 +40,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.ghostrunner.CLocation;
 import com.example.ghostrunner.HorizontalRecyclerViewAdapter;
 import com.example.ghostrunner.IBaseGpsListener;
-import com.example.ghostrunner.ImageModel;
 import com.example.ghostrunner.MainActivity;
 import com.example.ghostrunner.R;
-import com.example.ghostrunner.ui.MyTrailsRecyclerAdapter;
+import com.example.ghostrunner.models.Trail;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -88,8 +76,6 @@ import com.squareup.picasso.Target;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import de.nitri.gauge.Gauge;
 
@@ -101,6 +87,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, IBaseGp
     private static Marker fromCoords, toCoords;
     private static GeoApiContext mGeoApiContext;
     private static int trailIDpressed;
+    private static List<LatLng> pointsChoose;
     private Toolbar toolbar;
     private RecyclerView mHorizontalRecyclerView;
     private HorizontalRecyclerViewAdapter horizontalAdapter;
@@ -138,12 +125,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, IBaseGp
     private List<Bitmap> trails;
     private HorizontalRecyclerViewAdapter trailsAdapter;
     private FirebaseFirestore db;
-    ArrayList<ImageModel> imageModelArrayList;
+    ArrayList<Trail> imageModelArrayList;
     Location previousLocation;
     ArrayList<Polyline> polylines;
     ArrayList<LatLng> allLatLngs;
     private boolean onTrack;
-
+    private float speedSum = 0;
+    private int speedCount = 0;
     Runnable updateTimerThread = new Runnable() {
         @Override
         public void run() {
@@ -340,16 +328,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, IBaseGp
                                             Log.i(TAG,bitmap.toString());
                                             trails.add(bitmap);
                                             for (Bitmap bit : trails){
-                                                ImageModel imageModel0 = new ImageModel();
-                                                imageModel0.setId(document.get("id").toString());
-                                                imageModel0.setTrailName(document.get("trailName").toString());
-                                                //imageModel0.setDuration(document.get("duration").toString());
-                                                imageModel0.setDistance(document.get("distance").toString());
-                                                //imageModel0.setSpeed(document.get("speed").toString());
-                                                imageModel0.setDate(document.get("date").toString());
-                                                imageModel0.setCoordsStart((GeoPoint) document.get("coordStart"));
-                                                imageModel0.setCoordsEnd((GeoPoint) document.get("coordEnd"));
-                                                imageModelArrayList.add(imageModel0);
+                                                Trail traill = new Trail(document.get("id").toString(),document.get("trailName").toString(),
+                                                        document.get("address").toString(),document.get("description").toString(),document.get("distance").toString(),
+                                                        document.get("date").toString(),document.get("urlPhoto").toString(),(GeoPoint) document.get("coordStart"),
+                                                        (GeoPoint) document.get("coordEnd"), (List<LatLng>) document.get("trailPoint"));
+
+
+                                                imageModelArrayList.add(traill);
 
                                             }
                                             mHorizontalRecyclerView = (RecyclerView) root.findViewById(R.id.horizontalRecyclerView);
@@ -376,17 +361,27 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, IBaseGp
         }
     }
     private void swapFragment(){
+
         DescriptionFragment descriptionFragment = new DescriptionFragment();
+        Bundle args = new Bundle();
+        args.putString("Duration", txtTimer.getText().toString());
+        float meanSpeed = speedSum/speedCount;
+        args.putString("Speed", String.valueOf(meanSpeed)+" m/s");
+        args.putParcelable("CoordStart", allLatLngs.get(0));
+        args.putParcelable("CoordEnd", allLatLngs.get(allLatLngs.size()-1));
+        args.putParcelableArrayList("TrailPoints", allLatLngs);
+        descriptionFragment.setArguments(args);
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.mapFragemnt, descriptionFragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
-    public static void idPressed (GeoPoint coordsStart, GeoPoint coordsEnd) {
+    public static void idPressed (GeoPoint coordsStart, GeoPoint coordsEnd, List<LatLng> points) {
 
         MapFragment mapF = new MapFragment();
         MapFragment.coordsStart = coordsStart;
         MapFragment.coordsEnd = coordsEnd;
+        MapFragment.pointsChoose = points;
         mapF.showTrail();
     }
 
@@ -417,8 +412,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, IBaseGp
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
         fromCoords = mMap.addMarker(place1);
         toCoords = mMap.addMarker(place2);
-
-        calculateDirections(fromCoords, toCoords);
+        for (int z = 0; z < pointsChoose.size() - 1; z++) {
+            LatLng src = pointsChoose.get(z);
+            LatLng dest = pointsChoose.get(z + 1);
+            mMap.addPolyline(new PolylineOptions()
+                    .add(new LatLng(src.latitude, src.longitude),
+                            new LatLng(dest.latitude, dest.longitude))
+                    .width(20).color(Color.GREEN).geodesic(true));
+        }
+        //calculateDirections(fromCoords, toCoords);
     }
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -525,6 +527,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, IBaseGp
             location.setUseMetricunits(this.useMetricUnits());
             nCurrentSpeed = location.getSpeed();
             gauge.moveToValue(nCurrentSpeed);
+            speedSum+=nCurrentSpeed;
+            speedCount++;
         }
 
         Formatter fmt = new Formatter(new StringBuilder());
