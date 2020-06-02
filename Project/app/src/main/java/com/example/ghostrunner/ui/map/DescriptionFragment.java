@@ -1,4 +1,4 @@
-package com.example.ghostrunner.ui.profile;
+package com.example.ghostrunner.ui.map;
 
 import android.Manifest;
 import android.app.Activity;
@@ -19,13 +19,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-
 import androidx.fragment.app.Fragment;
-
 
 import com.example.ghostrunner.MainActivity;
 import com.example.ghostrunner.R;
-
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
@@ -44,13 +41,11 @@ import com.squareup.picasso.Picasso;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.util.List;
-import java.util.Objects;
 
 import static androidx.core.content.ContextCompat.checkSelfPermission;
 
 
-public class ProfileFragment extends Fragment implements View.OnClickListener {
+public class DescriptionFragment extends Fragment implements View.OnClickListener {
 
     private static final int CAMERA_REQUEST = 1888;
     private static final int MY_CAMERA_PERMISSION_CODE = 100;

@@ -14,22 +14,22 @@
 
     <de.nitri.gauge.Gauge
         android:id="@+id/gauge"
+        android:layout_width="106dp"
+        android:layout_height="106dp"
+        android:layout_marginTop="10dp"
+        gauge:faceColor="@color/anthracite"
         gauge:initialValue="0"
         gauge:maxValue="15"
         gauge:minValue="0"
-        gauge:totalNicks="15"
-        gauge:faceColor="@color/anthracite"
         gauge:scaleColor="@color/orangeRed"
-        gauge:valuePerNick="1"
-        android:layout_width="106dp"
-        android:layout_height="106dp"
-        android:layout_gravity="center"
-        android:layout_marginTop="10dp" />
+        gauge:totalNicks="15"
+        gauge:valuePerNick="1" />
+
     <TextView
         android:id="@+id/txtCurrentSpeed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="000.0 miles/hour"
+        android:text="000.0 m/h"
         android:textAppearance="?android:attr/textAppearanceLarge" />
     <CheckBox android:id="@+id/chkMetricUnits"
         android:layout_width="wrap_content"

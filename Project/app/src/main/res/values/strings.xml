@@ -6,6 +6,7 @@
     <string name="nav_profile">Profile</string>
     <string name="sign_in">SignIn</string>
     <string name="sign_out">SignOut</string>
+    <string name="add_trail">Add Trail</string>
     <string name="weightText">Weight(kg)</string>
     <string name="heightText">Height(cm)</string>
     <string name="caloriesText">Goal of calories(kcal)</string>
