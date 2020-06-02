@@ -19,6 +19,9 @@ import com.example.ghostrunner.ui.map.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.firestore.GeoPoint;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,9 +61,25 @@ public class HorizontalRecyclerViewAdapter extends RecyclerView.Adapter<Horizont
         messageViewHolder.imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               
-                //MapFragment.idPressed(model.getCoordStart(), model.getCoordEnd(), trailPoints);
-                Toast.makeText(context, model.getTrailPoints()+" - "+position, Toast.LENGTH_SHORT).show();
+                List<LatLng> trailPoints = new ArrayList<>();
+
+                for(int i = 0; i < model.getTrailPoints().size();i++){
+                    Object l1 = model.getTrailPoints().get(i);
+                    try {
+                        JSONObject jsonObject = new JSONObject(l1.toString());
+                        double lat = (double) jsonObject.get("latitude");
+                        double lng = (double) jsonObject.get("longitude");;
+                        LatLng latLng = new LatLng(lat, lng);
+                        trailPoints.add(latLng);
+                        //Toast.makeText(context, jsonObject.get("latitude")+" - "+position, Toast.LENGTH_SHORT).show();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+
+                MapFragment.idPressed(model.getCoordStart(), model.getCoordEnd(), trailPoints);
+
             }
         });
     }
