@@ -191,9 +191,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, IBaseGp
                                             ImageModel imageModel0 = new ImageModel();
                                             imageModel0.setId(document.get("id").toString());
                                             imageModel0.setTrailName(document.get("trailName").toString());
-                                            imageModel0.setDuration(document.get("duration").toString());
+                                            //imageModel0.setDuration(document.get("duration").toString());
                                             imageModel0.setDistance(document.get("distance").toString());
-                                            imageModel0.setSpeed(document.get("speed").toString());
+                                            //imageModel0.setSpeed(document.get("speed").toString());
                                             imageModel0.setDate(document.get("date").toString());
                                             imageModel0.setCoordsStart((GeoPoint) document.get("coordStart"));
                                             imageModel0.setCoordsEnd((GeoPoint) document.get("coordEnd"));

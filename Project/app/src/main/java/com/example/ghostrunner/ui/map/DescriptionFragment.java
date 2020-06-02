@@ -69,6 +69,7 @@ public class DescriptionFragment extends Fragment implements View.OnClickListene
     private TextView trailname;
     private TextView trailLocation;
     private TextView trailDescription;
+    private String date;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -97,7 +98,7 @@ public class DescriptionFragment extends Fragment implements View.OnClickListene
         //Cloud storage
         storage = FirebaseStorage.getInstance();
         storageRef = storage.getReference();
-        userImageRef = storageRef.child("trails/" +userId);
+
 
         Date c = Calendar.getInstance().getTime();
         SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
@@ -118,7 +119,7 @@ public class DescriptionFragment extends Fragment implements View.OnClickListene
                 if (photoChanged == true){
                     if(photoUrl == null) photoUrl = "https://contents.mediadecathlon.com/p1427463/640x0/27cr14/trail.jpg?k=3b52640a69d7a4dbb395121267e6ab91";
                     Trail tmpTrail = new Trail(userId, name,  address,  description, "1.5km", formattedDate,  photoUrl, new GeoPoint(40.048511, -8.890201),new GeoPoint(40.255185, -8.890201));
-                    db.collection("Trails").document(userId).set(tmpTrail);
+                    db.collection("Trails").document().set(tmpTrail);
                     Intent goToHome = new Intent(getContext(),MainActivity.class);
                     startActivity(goToHome);
 
@@ -200,6 +201,10 @@ public class DescriptionFragment extends Fragment implements View.OnClickListene
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         photo.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] photoBytes = baos.toByteArray();
+        Date currentTime = Calendar.getInstance().getTime();
+        date = currentTime.toString();
+        date = date + userId;
+        userImageRef = storageRef.child("trails/" +date);
         UploadTask uploadTask = userImageRef.putBytes(photoBytes);
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
@@ -209,8 +214,9 @@ public class DescriptionFragment extends Fragment implements View.OnClickListene
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
                 Toast.makeText(getContext(), "Photo Uploaded to Cloud", Toast.LENGTH_LONG).show();
-                storageRef.child("trails/" +userId).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                storageRef.child("trails/"+ date).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
                         photoUrl = uri.toString();

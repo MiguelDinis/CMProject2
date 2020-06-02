@@ -47,9 +47,9 @@ public class HorizontalRecyclerViewAdapter extends RecyclerView.Adapter<Horizont
 
         messageViewHolder.imageView.setImageBitmap(mDataset.get(position));
         messageViewHolder.trailName.setText(model.getTrailName());
-        messageViewHolder.duration.setText(model.getDuration());
+        //messageViewHolder.duration.setText(model.getDuration());
         messageViewHolder.distance.setText(model.getDistance());
-        messageViewHolder.speed.setText(model.getSpeed());
+        //messageViewHolder.speed.setText(model.getSpeed());
         messageViewHolder.date.setText(model.getDate());
 
         messageViewHolder.imageView.setOnClickListener(new View.OnClickListener() {
@@ -76,9 +76,9 @@ public class HorizontalRecyclerViewAdapter extends RecyclerView.Adapter<Horizont
             super(view);
             imageView = (ImageView) view.findViewById(R.id.imageView);
             trailName = (TextView) view.findViewById(R.id.trailNamecard);
-            duration = (TextView) view.findViewById(R.id.durationtxt);
+            //duration = (TextView) view.findViewById(R.id.durationtxt);
             distance = (TextView) view.findViewById(R.id.distancetxt);
-            speed = (TextView) view.findViewById(R.id.speedtxt);
+            //speed = (TextView) view.findViewById(R.id.speedtxt);
             date = (TextView) view.findViewById(R.id.date);
 
         }
