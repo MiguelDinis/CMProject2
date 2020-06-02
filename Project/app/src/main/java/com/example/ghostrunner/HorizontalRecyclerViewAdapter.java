@@ -32,7 +32,7 @@ public class HorizontalRecyclerViewAdapter extends RecyclerView.Adapter<Horizont
 
     @Override
     public int getItemCount() {
-        return imageModelArrayList.size();
+        return mDataset.size();
     }
 
     @Override
