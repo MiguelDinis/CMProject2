@@ -488,6 +488,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, IBaseGp
         {
             location.setUseMetricunits(this.useMetricUnits());
             nCurrentSpeed = location.getSpeed();
+            gauge.moveToValue(nCurrentSpeed);
         }
 
         Formatter fmt = new Formatter(new StringBuilder());
