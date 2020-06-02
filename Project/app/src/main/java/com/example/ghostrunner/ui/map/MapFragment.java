@@ -92,9 +92,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, IBaseGp
     private Polyline currentPolyline;
     SupportMapFragment mapFragment;
     static LatLng coordsStart, coordsEnd;
-    TextView txtTimer;
+
     TextView txtTimerStopped;
-    Gauge gauge;
+
     int curvalue;
     private View root;
     private boolean show = false;
@@ -108,7 +108,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, IBaseGp
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private static final float DEFAULT_ZOOM = 15f;
-
+    /////////////////
+    private Gauge gauge;
+    private TextView txtCurrentSpeed;
+    private TextView txtTimer;
+    private ImageButton buttonstartTimer;
+    private ImageButton buttonstopTimer;
+    private Button buttonadd;
+    RecyclerView recycler;
 
     Runnable updateTimerThread = new Runnable() {
         @Override
@@ -133,14 +140,16 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, IBaseGp
         root = inflater.inflate(R.layout.fragment_map, container, false);
 
 
-        RecyclerView recycler = root.findViewById(R.id.horizontalRecyclerView);
+        recycler = root.findViewById(R.id.horizontalRecyclerView);
+        txtCurrentSpeed = (TextView) root.findViewById(R.id.txtCurrentSpeed);
+        txtCurrentSpeed.setVisibility(View.INVISIBLE);
         recycler.setVisibility(View.INVISIBLE);
-
+        txtTimer = (TextView) root.findViewById(R.id.time);
         gauge = (Gauge) root.findViewById(R.id.gauge);
 
         curvalue = 0;
         gauge.setValue(curvalue);
-
+        gauge.setVisibility(View.INVISIBLE);
         getLocationPermission();
 
 
@@ -165,8 +174,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, IBaseGp
 
 
 
-        txtTimer = (TextView) root.findViewById(R.id.time);
-        final Button buttonadd = root.findViewById(R.id.addBtn);
+
+        txtTimer.setVisibility(View.INVISIBLE);
+        buttonadd = root.findViewById(R.id.addBtn);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         final Button button = root.findViewById(R.id.showhideBtn);
         button.setOnClickListener(new View.OnClickListener() {
@@ -196,7 +206,27 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, IBaseGp
                 }
             }
         });
-        final ImageButton buttonstartTimer = root.findViewById(R.id.starttimer);
+        buttonadd.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                gauge.setVisibility(View.VISIBLE);
+                txtCurrentSpeed.setVisibility(View.VISIBLE);
+                txtTimer.setVisibility(View.VISIBLE);
+                buttonstartTimer.setVisibility(View.VISIBLE);
+                buttonstopTimer.setVisibility(View.VISIBLE);
+                if(buttonadd.getText().equals("Start Trail")) {
+                    recycler.setVisibility(View.INVISIBLE);
+                    button.setVisibility(View.INVISIBLE);
+                    buttonadd.setVisibility(View.INVISIBLE);
+                }
+                else{
+                    recycler.setVisibility(View.INVISIBLE);
+                    button.setVisibility(View.INVISIBLE);
+                    buttonadd.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
+        buttonstartTimer = root.findViewById(R.id.starttimer);
+        buttonstartTimer.setVisibility(View.INVISIBLE);
         buttonstartTimer.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if(!startTimer){
@@ -214,11 +244,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, IBaseGp
 
             }
         });
-        final ImageButton buttonstopTimer = root.findViewById(R.id.endpausetimer);
+        buttonstopTimer = root.findViewById(R.id.endpausetimer);
+        buttonstopTimer.setVisibility(View.INVISIBLE);
         buttonstopTimer.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                txtTimerStopped = (TextView) root.findViewById(R.id.timeStoped);
-                txtTimerStopped.setText(txtTimer.getText());
+
+                //txtTimerStopped.setText(txtTimer.getText());
                 swapFragment();
 
 
@@ -440,14 +471,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, IBaseGp
             strUnits = "m/s";
         }
 
-        TextView txtCurrentSpeed = (TextView) root.findViewById(R.id.txtCurrentSpeed);
+
+
         txtCurrentSpeed.setText(strCurrentSpeed + " " + strUnits);
     }
 
     private boolean useMetricUnits() {
         // TODO Auto-generated method stub
         CheckBox chkUseMetricUnits = (CheckBox) root.findViewById(R.id.chkMetricUnits);
-        return chkUseMetricUnits.isChecked();
+        return true;
     }
 
     @Override
