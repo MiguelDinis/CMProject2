@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.location.Geocoder;
@@ -55,6 +56,7 @@ import com.example.ghostrunner.R;
 import com.example.ghostrunner.ui.MyTrailsRecyclerAdapter;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -137,6 +139,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, IBaseGp
     private HorizontalRecyclerViewAdapter trailsAdapter;
     private FirebaseFirestore db;
     ArrayList<ImageModel> imageModelArrayList;
+    Location previousLocation;
+    ArrayList<Polyline> polylines;
+    ArrayList<LatLng> allLatLngs;
+    private boolean onTrack;
+
     Runnable updateTimerThread = new Runnable() {
         @Override
         public void run() {
@@ -158,7 +165,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, IBaseGp
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         root = inflater.inflate(R.layout.fragment_map, container, false);
-
+        onTrack = false;
         imageModelArrayList = new ArrayList<>();
         recycler = root.findViewById(R.id.horizontalRecyclerView);
         txtCurrentSpeed = (TextView) root.findViewById(R.id.txtCurrentSpeed);
@@ -169,7 +176,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, IBaseGp
         main =  ((MainActivity) this.requireActivity());
         userId = main.getUserId();
         db = FirebaseFirestore.getInstance();
-
+        polylines = new ArrayList<>();
+        allLatLngs = new ArrayList<>();
         curvalue = 0;
         gauge.setValue(curvalue);
         gauge.setVisibility(View.INVISIBLE);
@@ -255,14 +263,24 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, IBaseGp
                 buttonstartTimer.setVisibility(View.VISIBLE);
                 buttonstopTimer.setVisibility(View.VISIBLE);
                 if(buttonadd.getText().equals("Start Trail")) {
+                    onTrack = true;
                     recycler.setVisibility(View.INVISIBLE);
                     button.setVisibility(View.INVISIBLE);
                     buttonadd.setVisibility(View.INVISIBLE);
+                    startTimer = true;
+                    buttonstartTimer.setImageResource(R.drawable.ic_pause);
+                    startTime = SystemClock.uptimeMillis();
+                    customHandler.postDelayed(updateTimerThread,0);
                 }
                 else{
+                    onTrack= true;
                     recycler.setVisibility(View.INVISIBLE);
                     button.setVisibility(View.INVISIBLE);
                     buttonadd.setVisibility(View.INVISIBLE);
+                    startTimer = true;
+                    buttonstartTimer.setImageResource(R.drawable.ic_pause);
+                    startTime = SystemClock.uptimeMillis();
+                    customHandler.postDelayed(updateTimerThread,0);
                 }
             }
         });
@@ -536,8 +554,54 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, IBaseGp
         // TODO Auto-generated method stub
         if(location != null)
         {
-            CLocation myLocation = new CLocation(location, this.useMetricUnits());
-            this.updateSpeed(myLocation);
+            if(onTrack) {
+                LatLng newpos = new LatLng(location.getLatitude(), location.getLongitude());
+                CameraPosition.Builder positionBuilder = new CameraPosition.Builder();
+                positionBuilder.target(newpos);
+                positionBuilder.zoom(20f);
+                positionBuilder.bearing(location.getBearing());
+                positionBuilder.tilt(60);
+                mMap.animateCamera(CameraUpdateFactory.newCameraPosition(positionBuilder.build()));
+
+
+                PolylineOptions lineOptions = new PolylineOptions()
+                        .add(new LatLng(previousLocation.getLatitude(), previousLocation.getLongitude()))
+                        .add(new LatLng(location.getLatitude(), location.getLongitude()))
+                        .color(Color.RED)
+                        .width(20);
+                // add the polyline to the map
+                Polyline polyline = mMap.addPolyline(lineOptions);
+                // set the zindex so that the poly line stays on top of my tile overlays
+                polyline.setZIndex(1000);
+                // add the poly line to the array so they can all be removed if necessary
+
+                polylines.add(polyline);
+                // add the latlng from this point to the array
+
+                allLatLngs.add(new LatLng(location.getLatitude(), location.getLongitude()));
+
+                // check if the positions added is a multiple of 100, if so, redraw all of the polylines as one line (this helps with rendering the map when there are thousands of points)
+                if (allLatLngs.size() % 100 == 0) {
+                    // first remove all of the existing polylines
+                    for (Polyline pline : polylines) {
+                        pline.remove();
+                    }
+                    // create one new large polyline
+                    Polyline routeSoFar = mMap.addPolyline(new PolylineOptions().color(Color.GREEN).width(5));
+                    // draw the polyline for the route so far
+                    routeSoFar.setPoints(allLatLngs);
+                    // set the zindex so that the poly line stays on top of my tile overlays
+                    routeSoFar.setZIndex(1000);
+                    // clear the polylines array
+                    polylines.clear();
+                    // add the new poly line as the first element in the polylines array
+                    polylines.add(routeSoFar);
+                }
+
+                previousLocation = location;
+                CLocation myLocation = new CLocation(location, this.useMetricUnits());
+                this.updateSpeed(myLocation);
+            }
         }
     }
 
@@ -582,7 +646,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, IBaseGp
                         if(task.isSuccessful()){
                             Log.d(TAG, "onComplete: found location!");
                             Location currentLocation = (Location) task.getResult();
-
+                            previousLocation = currentLocation;
                             moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()),
                                     DEFAULT_ZOOM);
 
