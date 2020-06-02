@@ -40,6 +40,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -92,6 +93,7 @@ public class DescriptionFragment extends Fragment implements View.OnClickListene
         coordStart = getArguments().getParcelable("CoordStart");
         coordEnd = getArguments().getParcelable("CoordEnd");
         trailPoints = getArguments().getParcelableArrayList("TrailPoints");
+        trailPointsGeo = new ArrayList<GeoPoint>();
         for(int i = 0; i < trailPoints.size(); i++){
             double lat = trailPoints.get(i).latitude;
             double lng = trailPoints.get(i).longitude;
