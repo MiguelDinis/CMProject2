@@ -3,6 +3,7 @@ package com.example.ghostrunner.ui.map;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.location.Geocoder;
@@ -49,7 +50,9 @@ import com.example.ghostrunner.CLocation;
 import com.example.ghostrunner.HorizontalRecyclerViewAdapter;
 import com.example.ghostrunner.IBaseGpsListener;
 import com.example.ghostrunner.ImageModel;
+import com.example.ghostrunner.MainActivity;
 import com.example.ghostrunner.R;
+import com.example.ghostrunner.ui.MyTrailsRecyclerAdapter;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -65,12 +68,17 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.maps.DirectionsApiRequest;
 import com.google.maps.GeoApiContext;
 import com.google.maps.PendingResult;
 import com.google.maps.internal.PolylineEncoding;
 import com.google.maps.model.DirectionsResult;
 import com.google.maps.model.DirectionsRoute;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -88,6 +96,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, IBaseGp
     private Toolbar toolbar;
     private RecyclerView mHorizontalRecyclerView;
     private HorizontalRecyclerViewAdapter horizontalAdapter;
+    private HorizontalRecyclerViewAdapter horizontalAdapter2;
     private LinearLayoutManager horizontalLayoutManager;
     private Polyline currentPolyline;
     SupportMapFragment mapFragment;
@@ -116,7 +125,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, IBaseGp
     private ImageButton buttonstopTimer;
     private Button buttonadd;
     RecyclerView recycler;
-
+    private String userId;
+    private MainActivity main;
+    private List<Bitmap> trails;
+    private HorizontalRecyclerViewAdapter trailsAdapter;
+    private FirebaseFirestore db;
+    ArrayList<ImageModel> imageModelArrayList;
     Runnable updateTimerThread = new Runnable() {
         @Override
         public void run() {
@@ -139,18 +153,76 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, IBaseGp
                              ViewGroup container, Bundle savedInstanceState) {
         root = inflater.inflate(R.layout.fragment_map, container, false);
 
-
+        imageModelArrayList = new ArrayList<>();
         recycler = root.findViewById(R.id.horizontalRecyclerView);
         txtCurrentSpeed = (TextView) root.findViewById(R.id.txtCurrentSpeed);
         txtCurrentSpeed.setVisibility(View.INVISIBLE);
         recycler.setVisibility(View.INVISIBLE);
         txtTimer = (TextView) root.findViewById(R.id.time);
         gauge = (Gauge) root.findViewById(R.id.gauge);
+        main =  ((MainActivity) this.requireActivity());
+        userId = main.getUserId();
+        db = FirebaseFirestore.getInstance();
 
         curvalue = 0;
         gauge.setValue(curvalue);
         gauge.setVisibility(View.INVISIBLE);
         getLocationPermission();
+
+
+
+
+        trails = new ArrayList<>();
+        db.collection("Trails")
+                .whereEqualTo("id", userId)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (final QueryDocumentSnapshot document : task.getResult()) {
+                                Picasso.get().load(document.get("urlPhoto").toString()).into(new Target() {
+                                    @Override
+                                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                                        Log.i(TAG,bitmap.toString());
+                                        trails.add(bitmap);
+                                        for (Bitmap bit : trails){
+                                            ImageModel imageModel0 = new ImageModel();
+                                            imageModel0.setId(document.get("id").toString());
+                                            imageModel0.setTrailName(document.get("trailName").toString());
+                                            imageModel0.setDuration(document.get("duration").toString());
+                                            imageModel0.setDistance(document.get("distance").toString());
+                                            imageModel0.setSpeed(document.get("speed").toString());
+                                            imageModel0.setDate(document.get("date").toString());
+                                            imageModel0.setCoordsStart(new LatLng(40.048611, -8.890201));
+                                            imageModel0.setCoordsEnd(new LatLng(40.155185, -8.867252));
+                                            imageModelArrayList.add(imageModel0);
+
+                                        }
+                                        mHorizontalRecyclerView = (RecyclerView) root.findViewById(R.id.horizontalRecyclerView);
+                                        horizontalAdapter = new HorizontalRecyclerViewAdapter(imageModelArrayList,trails, getContext());
+                                        horizontalLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+                                        mHorizontalRecyclerView.setLayoutManager(horizontalLayoutManager);
+                                        mHorizontalRecyclerView.setAdapter((RecyclerView.Adapter) horizontalAdapter);
+                                    }
+
+                                    @Override
+                                    public void onBitmapFailed(Exception e, Drawable errorDrawable) {
+                                    }
+                                    @Override
+                                    public void onPrepareLoad(Drawable placeHolderDrawable) {
+                                    }
+                                });
+
+                            }
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+
+
+
 
 
         LocationManager locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
@@ -183,7 +255,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, IBaseGp
             public void onClick(View v) {
                 if(show) {
                     mMap.clear();
-                    RecyclerView recycler = root.findViewById(R.id.horizontalRecyclerView);
+                    recycler = root.findViewById(R.id.horizontalRecyclerView);
                     recycler.setVisibility(View.INVISIBLE);
                     button.setText("Show Trails");
                     buttonadd.setText("Add Trail");
@@ -194,7 +266,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, IBaseGp
                     show = false;
                 }
                 else{
-                    RecyclerView recycler = root.findViewById(R.id.horizontalRecyclerView);
+                    recycler = root.findViewById(R.id.horizontalRecyclerView);
+
+
+
                     recycler.setVisibility(View.VISIBLE);
                     button.setText("Hide Trails");
                     buttonadd.setText("Start Trail");
@@ -392,57 +467,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, IBaseGp
         });
     }
 
-    public ArrayList<ImageModel> fillWithData() {
-        ArrayList<ImageModel> imageModelArrayList = new ArrayList<>();
-        ImageModel imageModel0 = new ImageModel();
-        imageModel0.setId(System.currentTimeMillis());
-        imageModel0.setImageName("Trail 1");
-        imageModel0.setImagePath(R.drawable.pic);
-        imageModelArrayList.add(imageModel0);
-        imageModel0.setCoordsStart(new LatLng(40.048611, -8.890201));
-        imageModel0.setCoordsEnd(new LatLng(40.155185, -8.867252));
-
-        ImageModel imageModel1 = new ImageModel();
-        imageModel1.setId(System.currentTimeMillis());
-        imageModel1.setImageName("Trail 2");
-        imageModel1.setImagePath(R.drawable.pic2);
-        imageModelArrayList.add(imageModel1);
-        imageModel1.setCoordsStart(new LatLng(40.049611, -8.890201));
-        imageModel1.setCoordsEnd(new LatLng(40.165185, -8.867252));
-
-        ImageModel imageModel2 = new ImageModel();
-        imageModel2.setId(System.currentTimeMillis());
-        imageModel2.setImageName("Trail 3");
-        imageModel2.setImagePath(R.drawable.pic3);
-        imageModelArrayList.add(imageModel2);
-        imageModel2.setCoordsStart(new LatLng(40.048511, -8.890201));
-        imageModel2.setCoordsEnd(new LatLng(40.255185, -8.867252));
-
-        ImageModel imageModel3 = new ImageModel();
-        imageModel3.setId(System.currentTimeMillis());
-        imageModel3.setImageName("Trail 4");
-        imageModel3.setImagePath(R.drawable.pic4);
-        imageModelArrayList.add(imageModel3);
-        imageModel3.setCoordsStart(new LatLng(40.048611, -8.890201));
-        imageModel3.setCoordsEnd(new LatLng(40.155185, -8.867252));
-
-        ImageModel imageModel4 = new ImageModel();
-        imageModel4.setId(System.currentTimeMillis());
-        imageModel4.setImageName("Trail 5");
-        imageModel4.setImagePath(R.drawable.pic5);
-        imageModelArrayList.add(imageModel4);
-        imageModel4.setCoordsStart(new LatLng(40.048511, -8.890201));
-        imageModel4.setCoordsEnd(new LatLng(40.255185, -8.867252));
-
-        ImageModel imageModel5 = new ImageModel();
-        imageModel5.setId(System.currentTimeMillis());
-        imageModel5.setImageName("Trail 6");
-        imageModel5.setImagePath(R.drawable.pic6);
-        imageModelArrayList.add(imageModel5);
-        imageModel5.setCoordsStart(new LatLng(40.048611, -8.890201));
-        imageModel5.setCoordsEnd(new LatLng(40.155185, -8.867252));
-        return imageModelArrayList;
-    }
 
     public void finish()
     {
@@ -557,12 +581,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, IBaseGp
         mapFragment = (SupportMapFragment) getChildFragmentManager()
                 .findFragmentById(R.id.map);
 
-        mHorizontalRecyclerView = (RecyclerView) root.findViewById(R.id.horizontalRecyclerView);
-        horizontalAdapter = new HorizontalRecyclerViewAdapter(fillWithData(), getContext());
-
-        horizontalLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-        mHorizontalRecyclerView.setLayoutManager(horizontalLayoutManager);
-        mHorizontalRecyclerView.setAdapter((RecyclerView.Adapter) horizontalAdapter);
 
         mapFragment.getMapAsync(this);
     }
