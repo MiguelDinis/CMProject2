@@ -243,6 +243,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, IBaseGp
                     Drawable img2= button.getContext().getResources().getDrawable( R.drawable.ic_show);
                     button.setCompoundDrawablesWithIntrinsicBounds( img2, null, null, null);
                     show = false;
+                    onTrack = false;
+                    trailPressed = false;
                 }
                 else{
                     recycler = root.findViewById(R.id.horizontalRecyclerView);
@@ -362,7 +364,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, IBaseGp
                                             trails.add(bitmap);
                                             for (Bitmap bit : trails){
                                                 Trail traill = new Trail(document.get("id").toString(),document.get("trailName").toString(),
-                                                        document.get("address").toString(),document.get("description").toString(),document.get("distance").toString(),
+                                                        document.get("address").toString(),document.get("description").toString(),document.get("duration").toString(),
+                                                        document.get("distance").toString(),document.get("speed").toString(),
                                                         document.get("date").toString(),document.get("urlPhoto").toString(),(GeoPoint) document.get("coordStart"),
                                                         (GeoPoint) document.get("coordEnd"), (List<GeoPoint>) document.get("trailPoints"));
 

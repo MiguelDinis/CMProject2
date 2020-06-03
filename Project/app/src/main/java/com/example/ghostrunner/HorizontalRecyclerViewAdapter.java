@@ -53,9 +53,9 @@ public class HorizontalRecyclerViewAdapter extends RecyclerView.Adapter<Horizont
 
         messageViewHolder.imageView.setImageBitmap(mDataset.get(position));
         messageViewHolder.trailName.setText(model.getTrailName());
-        //messageViewHolder.duration.setText(model.getDuration());
+        messageViewHolder.duration.setText(model.getDuration());
         messageViewHolder.distance.setText(model.getDistance());
-        //messageViewHolder.speed.setText(model.getSpeed());
+        messageViewHolder.speed.setText(model.getSpeed());
         messageViewHolder.date.setText(model.getDate());
 
         messageViewHolder.imageView.setOnClickListener(new View.OnClickListener() {
@@ -64,17 +64,11 @@ public class HorizontalRecyclerViewAdapter extends RecyclerView.Adapter<Horizont
                 List<LatLng> trailPoints = new ArrayList<>();
 
                 for(int i = 0; i < model.getTrailPoints().size();i++){
-                    Object l1 = model.getTrailPoints().get(i);
-                    try {
-                        JSONObject jsonObject = new JSONObject(l1.toString());
-                        double lat = (double) jsonObject.get("latitude");
-                        double lng = (double) jsonObject.get("longitude");;
-                        LatLng latLng = new LatLng(lat, lng);
-                        trailPoints.add(latLng);
-                        //Toast.makeText(context, jsonObject.get("latitude")+" - "+position, Toast.LENGTH_SHORT).show();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+                    GeoPoint l1 = model.getTrailPoints().get(i);
+                    double lat = (double) l1.getLatitude();
+                    double lng = (double) l1.getLongitude();;
+                    LatLng latLng = new LatLng(lat, lng);
+                    trailPoints.add(latLng);
 
                 }
 
@@ -98,9 +92,9 @@ public class HorizontalRecyclerViewAdapter extends RecyclerView.Adapter<Horizont
             super(view);
             imageView = (ImageView) view.findViewById(R.id.imageView);
             trailName = (TextView) view.findViewById(R.id.trailNamecard);
-            //duration = (TextView) view.findViewById(R.id.durationtxt);
+            duration = (TextView) view.findViewById(R.id.durationtxt);
             distance = (TextView) view.findViewById(R.id.distancetxt);
-            //speed = (TextView) view.findViewById(R.id.speedtxt);
+            speed = (TextView) view.findViewById(R.id.speedtxt);
             date = (TextView) view.findViewById(R.id.date);
 
         }

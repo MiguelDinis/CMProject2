@@ -12,19 +12,23 @@ public class Trail {
     private String trailName;
     private String address;
     private String description;
+    private String duration;
     private String distance;
+    private String speed;
     private String CreatedDate;
     private String urlPhoto;
     private GeoPoint coordStart;
     private GeoPoint coordEnd;
     private List<GeoPoint> trailPoints;
 
-    public Trail(String id, String trailName, String address, String description, String distance,String CreatedDate, String urlPhoto,GeoPoint coordStart, GeoPoint coordEnd,List<GeoPoint> trailPoints ) {
+    public Trail(String id, String trailName, String address, String description, String duration, String distance,String speed,String CreatedDate, String urlPhoto,GeoPoint coordStart, GeoPoint coordEnd,List<GeoPoint> trailPoints ) {
         this.id = id;
         this.trailName = trailName;
         this.address = address;
         this.description = description;
+        this.duration = duration;
         this.distance = distance;
+        this.speed = speed;
         this.CreatedDate = CreatedDate;
         this.urlPhoto = urlPhoto;
         this.coordStart = coordStart;
@@ -41,12 +45,16 @@ public class Trail {
         this.trailName = trailName;
     }
 
-
+    public void setDuration(String duration) {
+        this.duration = duration;
+    }
 
     public void setDistance(String distance) {
         this.distance = distance;
     }
-
+    public void setSpeed(String speed) {
+        this.speed = speed;
+    }
 
 
     public void setCoordsStart(GeoPoint coordsStart) {
@@ -74,9 +82,14 @@ public class Trail {
         return description;
     }
 
-
+    public String getDuration() {
+        return duration;
+    }
     public String getDistance() {
         return distance;
+    }
+    public String getSpeed() {
+        return speed;
     }
 
 
