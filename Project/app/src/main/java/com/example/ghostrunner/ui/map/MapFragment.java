@@ -298,7 +298,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, IBaseGp
             public void onClick(View v) {
 
                 //txtTimerStopped.setText(txtTimer.getText());
-                swapFragment();
+                if( allLatLngs.size() != 0)
+                    swapFragment();
+                else
+                    Toast.makeText(getContext(), "You need to move a little bit", Toast.LENGTH_SHORT).show();
 
 
             }

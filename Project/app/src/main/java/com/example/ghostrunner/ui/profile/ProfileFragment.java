@@ -72,6 +72,9 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     StorageReference userImageRef;
     private FirebaseFirestore db;
     private DocumentReference docRef;
+    private TextView profileWeight;
+    private TextView profileHeight;
+
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -83,6 +86,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         signOutButton = (Button) root.findViewById(R.id.but_sign_out);
         changePhoto = root.findViewById(R.id.changePhotoBut);
         galleryPick = root.findViewById(R.id.galleryBut);
+        profileHeight = root.findViewById(R.id.textView2);
+        profileWeight = root.findViewById(R.id.profileWeight);
         userPic = root.findViewById(R.id.userPic);
         userNameText = root.findViewById(R.id.userNameText);
         qrcodeView = root.findViewById(R.id.qrCodeView);
@@ -96,6 +101,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 photoUrl = documentSnapshot.get("mPhotoUrl").toString();
+                profileHeight.setText(documentSnapshot.get("userHeight").toString() + "cm");
+                profileWeight.setText(documentSnapshot.get("userWeight").toString() + "kg");
                 Picasso.get().load(photoUrl).into(userPic);
             }
         });
