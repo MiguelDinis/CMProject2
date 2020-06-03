@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -15,6 +16,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.BounceInterpolator;
+import android.view.animation.Interpolator;
+import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
@@ -48,6 +52,7 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
@@ -76,6 +81,8 @@ import com.squareup.picasso.Target;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import de.nitri.gauge.Gauge;
 
@@ -83,7 +90,9 @@ import de.nitri.gauge.Gauge;
 public class MapFragment extends Fragment implements OnMapReadyCallback, IBaseGpsListener {
 
     private static GoogleMap mMap;
-    private static MarkerOptions place1, place2;
+    private static MarkerOptions place1;
+    private static MarkerOptions place2;
+    private static Marker ghost;
     private static Marker fromCoords, toCoords;
     private static GeoApiContext mGeoApiContext;
     private static int trailIDpressed;
@@ -134,6 +143,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, IBaseGp
     private boolean onTrack;
     private float speedSum = 0;
     private int speedCount = 0;
+    private int countIterTrail = 0;
+    private  LatLng nextPoint;
+
     Runnable updateTimerThread = new Runnable() {
         @Override
         public void run() {
@@ -195,9 +207,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, IBaseGp
         LocationManager locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             Toast.makeText(getContext(), "unable to get current location", Toast.LENGTH_SHORT).show();
+        }else {
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
         }
 
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+
         this.updateSpeed(null);
 
 
@@ -261,6 +275,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, IBaseGp
                         button.setVisibility(View.INVISIBLE);
                         buttonadd.setVisibility(View.INVISIBLE);
                         startTimer = true;
+                        updateGhost();
                         buttonstartTimer.setImageResource(R.drawable.ic_pause);
                         startTime = SystemClock.uptimeMillis();
                         customHandler.postDelayed(updateTimerThread,0);
@@ -404,6 +419,37 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, IBaseGp
         mapF.showTrail();
     }
 
+    public void  updateGhost()
+    {
+
+
+
+
+
+            final Handler h = new Handler();
+            final int delay = 1000;
+
+            h.postDelayed(new Runnable(){
+                public void run(){
+                    if(countIterTrail < pointsChoose.size()) {
+                        nextPoint = pointsChoose.get(countIterTrail);
+                        if (ghost != null) {
+                            ghost.remove();
+                        }
+                        ghost = mMap.addMarker(new MarkerOptions().position(nextPoint).title("Ghost").icon(BitmapDescriptorFactory.fromResource(R.drawable.ghost)));
+                        ghost.setPosition(nextPoint);
+                        countIterTrail++;
+                        //Log.i(TAG, " "+nextPoint);
+
+                        h.postDelayed(this, delay);
+                    }
+                }
+            }, delay);
+
+
+    }
+
+
     public void  showTrail()
     {   trailPressed = true;
         mMap.clear();
@@ -431,6 +477,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, IBaseGp
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
         fromCoords = mMap.addMarker(place1);
         toCoords = mMap.addMarker(place2);
+
         for (int z = 0; z < pointsChoose.size() - 1; z++) {
             LatLng src = pointsChoose.get(z);
             LatLng dest = pointsChoose.get(z + 1);

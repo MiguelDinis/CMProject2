@@ -18,7 +18,7 @@
         android:clickable="true"
         android:src="@drawable/ic_addd"
         app:backgroundTint="#2196F3"
-        app:elevation="0dp"
+        app:elevation="1dp"
         app:fabSize="auto"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
