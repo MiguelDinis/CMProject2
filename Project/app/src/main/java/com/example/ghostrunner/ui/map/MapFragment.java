@@ -88,6 +88,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, IBaseGp
     private static GeoApiContext mGeoApiContext;
     private static int trailIDpressed;
     private static List<LatLng> pointsChoose;
+    private static boolean trailPressed;
     private Toolbar toolbar;
     private RecyclerView mHorizontalRecyclerView;
     private HorizontalRecyclerViewAdapter horizontalAdapter;
@@ -155,6 +156,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, IBaseGp
                              ViewGroup container, Bundle savedInstanceState) {
         root = inflater.inflate(R.layout.fragment_map, container, false);
         onTrack = false;
+        trailPressed = false;
         imageModelArrayList = new ArrayList<>();
         recycler = root.findViewById(R.id.horizontalRecyclerView);
         txtCurrentSpeed = (TextView) root.findViewById(R.id.txtCurrentSpeed);
@@ -246,23 +248,35 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, IBaseGp
         });
         buttonadd.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                gauge.setVisibility(View.VISIBLE);
-                txtCurrentSpeed.setVisibility(View.VISIBLE);
-                txtTimer.setVisibility(View.VISIBLE);
-                buttonstartTimer.setVisibility(View.VISIBLE);
-                buttonstopTimer.setVisibility(View.VISIBLE);
+
                 if(buttonadd.getText().equals("Start Trail")) {
-                    onTrack = true;
-                    recycler.setVisibility(View.INVISIBLE);
-                    button.setVisibility(View.INVISIBLE);
-                    buttonadd.setVisibility(View.INVISIBLE);
-                    startTimer = true;
-                    buttonstartTimer.setImageResource(R.drawable.ic_pause);
-                    startTime = SystemClock.uptimeMillis();
-                    customHandler.postDelayed(updateTimerThread,0);
+                    if(trailPressed){
+                        onTrack = true;
+                        gauge.setVisibility(View.VISIBLE);
+                        txtCurrentSpeed.setVisibility(View.VISIBLE);
+                        txtTimer.setVisibility(View.VISIBLE);
+                        buttonstartTimer.setVisibility(View.VISIBLE);
+                        buttonstopTimer.setVisibility(View.VISIBLE);
+                        recycler.setVisibility(View.INVISIBLE);
+                        button.setVisibility(View.INVISIBLE);
+                        buttonadd.setVisibility(View.INVISIBLE);
+                        startTimer = true;
+                        buttonstartTimer.setImageResource(R.drawable.ic_pause);
+                        startTime = SystemClock.uptimeMillis();
+                        customHandler.postDelayed(updateTimerThread,0);
+                    }
+                    else{
+                        Toast.makeText(getContext(), "Please select a Trail!", Toast.LENGTH_SHORT).show();
+                    }
+
                 }
                 else{
                     onTrack= true;
+                    gauge.setVisibility(View.VISIBLE);
+                    txtCurrentSpeed.setVisibility(View.VISIBLE);
+                    txtTimer.setVisibility(View.VISIBLE);
+                    buttonstartTimer.setVisibility(View.VISIBLE);
+                    buttonstopTimer.setVisibility(View.VISIBLE);
                     recycler.setVisibility(View.INVISIBLE);
                     button.setVisibility(View.INVISIBLE);
                     buttonadd.setVisibility(View.INVISIBLE);
@@ -317,8 +331,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, IBaseGp
 
     public void updateTrailList(List<String> trailsToShow){
         trails = new ArrayList<>();
-        test = new ArrayList<>();
-        test.add(new GeoPoint(40.534634634,-8.234634634));
         for(String trail : trailsToShow){
             db.collection("Trails")
                     .whereEqualTo("id", trail)
@@ -388,11 +400,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, IBaseGp
         MapFragment.coordsStart = coordsStart;
         MapFragment.coordsEnd = coordsEnd;
         MapFragment.pointsChoose = points;
+        MapFragment.trailPressed = true;
         mapF.showTrail();
     }
 
     public void  showTrail()
-    {
+    {   trailPressed = true;
         mMap.clear();
         double lat1 = coordsStart.getLatitude();
         double lng1 = coordsStart.getLongitude ();
