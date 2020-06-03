@@ -54,8 +54,8 @@ public class HorizontalRecyclerViewAdapter extends RecyclerView.Adapter<Horizont
         messageViewHolder.imageView.setImageBitmap(mDataset.get(position));
         messageViewHolder.trailName.setText(model.getTrailName());
         messageViewHolder.duration.setText(model.getDuration());
-        messageViewHolder.distance.setText(model.getDistance());
-        messageViewHolder.speed.setText(model.getSpeed());
+        messageViewHolder.distance.setText(String.format("%.3f", Double.valueOf(model.getDistance()))+" km");
+        messageViewHolder.speed.setText( String.format("%.3f", Double.valueOf(model.getSpeed()))+" m/s");
         messageViewHolder.date.setText(model.getDate());
 
         messageViewHolder.imageView.setOnClickListener(new View.OnClickListener() {

@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,11 +19,20 @@ public class MyTrailsRecyclerAdapter extends RecyclerView.Adapter<MyTrailsRecycl
     private List<Bitmap> mDataset;
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         // each data item is just a string in this case
-        public ImageView imageView;;
+        public ImageView imageView;
+        public TextView trailName;
+        public TextView duration;
+        public TextView distance;
+        public TextView speed;
+        public TextView date;
         public MyViewHolder(View v) {
             super(v);
             imageView = (ImageView) v.findViewById(R.id.trailPhoto);
-
+            trailName = (TextView) v.findViewById(R.id.trailNamecard2);
+            duration = (TextView) v.findViewById(R.id.durationtxt2);
+            distance = (TextView) v.findViewById(R.id.distancetxt2);
+            speed = (TextView) v.findViewById(R.id.speedtxt2);
+            date = (TextView) v.findViewById(R.id.date2);
         }
     }
 

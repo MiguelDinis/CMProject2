@@ -402,7 +402,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, IBaseGp
         Bundle args = new Bundle();
         args.putString("Duration", txtTimer.getText().toString());
         float meanSpeed = speedSum/speedCount;
-        args.putString("Speed", String.valueOf(meanSpeed)+" m/s");
+        args.putString("Speed", String.valueOf(meanSpeed));
         args.putParcelable("CoordStart", allLatLngs.get(0));
         args.putParcelable("CoordEnd", allLatLngs.get(allLatLngs.size()-1));
         args.putParcelableArrayList("TrailPoints", allLatLngs);

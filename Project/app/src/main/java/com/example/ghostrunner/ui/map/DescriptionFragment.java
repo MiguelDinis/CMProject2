@@ -103,7 +103,7 @@ public class DescriptionFragment extends Fragment implements View.OnClickListene
         for(int i = 0; i < trailPoints.size()-1; i++){
             dist += distance(trailPoints.get(i).latitude, trailPoints.get(i).longitude,trailPoints.get(i+1).latitude, trailPoints.get(i+1).longitude,'K' );
         }
-        diststr = dist +" km";
+        diststr = String.valueOf(dist);
 
         pointStart = new GeoPoint(coordStart.latitude,coordStart.longitude);
         pointEnd = new GeoPoint(coordEnd.latitude,coordEnd.longitude);
