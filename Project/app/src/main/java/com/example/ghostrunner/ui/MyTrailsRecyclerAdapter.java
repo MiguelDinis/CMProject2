@@ -55,6 +55,7 @@ public class MyTrailsRecyclerAdapter extends RecyclerView.Adapter<MyTrailsRecycl
     public void onBindViewHolder(@NonNull MyTrailsRecyclerAdapter.MyViewHolder holder, int position) {
         holder.imageView.setImageBitmap(mDataset.get(position));
 
+
     }
 
     @Override

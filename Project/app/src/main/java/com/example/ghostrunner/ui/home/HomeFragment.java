@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ghostrunner.FriendsAdapter;
+import com.example.ghostrunner.HorizontalRecyclerHomeAdapter;
 import com.example.ghostrunner.HorizontalRecyclerViewAdapter;
 import com.example.ghostrunner.MainActivity;
 import com.example.ghostrunner.R;
@@ -52,7 +53,7 @@ public class HomeFragment extends Fragment {
     private LinearLayoutManager horizontalLayoutManager;
     private ArrayList<Trail> imageModelArrayList;
     private RecyclerView mHorizontalRecyclerView;
-    private HorizontalRecyclerViewAdapter horizontalAdapter;
+    private HorizontalRecyclerHomeAdapter horizontalAdapter;
     private String todayDate;
     private String distanceTotal;
     private String timeTotal;
@@ -108,7 +109,7 @@ public class HomeFragment extends Fragment {
                                                         document.get("address").toString(),document.get("description").toString(),document.get("duration").toString(),
                                                         document.get("distance").toString(),document.get("speed").toString(),
                                                         document.get("date").toString(),document.get("urlPhoto").toString(),(GeoPoint) document.get("coordStart"),
-                                                        (GeoPoint) document.get("coordEnd"), (List<GeoPoint>) document.get("trailPoints"));
+                                                        (GeoPoint) document.get("coordEnd"), (List<GeoPoint>) document.get("trailPoints"), (String) document.get("parentId"));
 
 
                                                 imageModelArrayList.add(traill);
@@ -123,21 +124,25 @@ public class HomeFragment extends Fragment {
                                                     } catch (ParseException e) {
                                                         e.printStackTrace();
                                                     }
+                                                    long sum;
+                                                    if((date1 != null) && (date2 != null)) {
+                                                        sum = date1.getTime() + date2.getTime();
+                                                        timeTotal = timeFormat.format(new Date(sum));
+                                                        double mean =  Double.valueOf(speedTotal)+Double.valueOf(document.get("speed").toString())/traildisplaycont;
+                                                        speedTotal = mean+"";
 
-                                                    long sum = date1.getTime() + date2.getTime();
-                                                    timeTotal = timeFormat.format(new Date(sum));
+                                                        distance.setText(String.format("%.3f", Double.valueOf(distanceTotal))+" km");
+                                                        duration.setText(timeTotal);
+                                                        speed.setText(String.format("%.3f", Double.valueOf(speedTotal))+" ms");
+                                                    }
 
-                                                    double mean =  Double.valueOf(speedTotal)+Double.valueOf(document.get("speed").toString())/traildisplaycont;
-                                                    speedTotal = mean+"";
 
-                                                    distance.setText(String.format("%.3f", Double.valueOf(distanceTotal))+" km");
-                                                    duration.setText(timeTotal);
-                                                    speed.setText(String.format("%.3f", Double.valueOf(speedTotal))+" ms");
+
 
                                                 }
                                             }
                                             mHorizontalRecyclerView = (RecyclerView) root.findViewById(R.id.trailsView);
-                                            horizontalAdapter = new HorizontalRecyclerViewAdapter(imageModelArrayList,trails, getContext());
+                                            horizontalAdapter = new HorizontalRecyclerHomeAdapter(imageModelArrayList,trails, getContext());
                                             horizontalLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
                                             mHorizontalRecyclerView.setLayoutManager(horizontalLayoutManager);
                                             mHorizontalRecyclerView.setAdapter((RecyclerView.Adapter) horizontalAdapter);

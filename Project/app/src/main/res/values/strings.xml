@@ -23,6 +23,8 @@
     <string name="weight">Weight</string>
     <string name="height">Height</string>
     <string name="friendtrails">My trails</string>
+    <string name="compare">Times comparation by friend</string>
+
     <string name="appbar_scrolling_view_behavior" translatable="false">com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior</string>
 
     <!-- TODO: Remove or change this placeholder text -->

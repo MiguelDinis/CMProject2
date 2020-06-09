@@ -83,6 +83,7 @@ public class DescriptionFragment extends Fragment implements View.OnClickListene
     private List<GeoPoint> trailPointsGeo;
     private double dist;
     private String diststr;
+    private String parentId;
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -93,6 +94,7 @@ public class DescriptionFragment extends Fragment implements View.OnClickListene
         coordStart = getArguments().getParcelable("CoordStart");
         coordEnd = getArguments().getParcelable("CoordEnd");
         trailPoints = getArguments().getParcelableArrayList("TrailPoints");
+        parentId = getArguments().getString("parentId");
         trailPointsGeo = new ArrayList<GeoPoint>();
         for(int i = 0; i < trailPoints.size(); i++){
             double lat = trailPoints.get(i).latitude;
@@ -173,7 +175,7 @@ public class DescriptionFragment extends Fragment implements View.OnClickListene
                 String description = trailDescription.getText().toString();
                 if (photoChanged == true){
                     if(photoUrl == null) photoUrl = "https://contents.mediadecathlon.com/p1427463/640x0/27cr14/trail.jpg?k=3b52640a69d7a4dbb395121267e6ab91";
-                    Trail tmpTrail = new Trail(userId, name,  address,  description, duration, diststr, speed, formattedDate,  photoUrl, pointStart, pointEnd,trailPointsGeo);
+                    Trail tmpTrail = new Trail(userId, name,  address,  description, duration, diststr, speed, formattedDate,  photoUrl, pointStart, pointEnd,trailPointsGeo, parentId);
                     db.collection("Trails").document().set(tmpTrail);
                     Intent goToHome = new Intent(getContext(),MainActivity.class);
                     startActivity(goToHome);

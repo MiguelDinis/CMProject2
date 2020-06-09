@@ -104,6 +104,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, IBaseGp
     private HorizontalRecyclerViewAdapter horizontalAdapter2;
     private LinearLayoutManager horizontalLayoutManager;
     private Polyline currentPolyline;
+    private static String parentId;
     SupportMapFragment mapFragment;
     static GeoPoint coordsStart, coordsEnd;
 
@@ -156,7 +157,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, IBaseGp
             int hours = mins / 60;
             secs %= 60;
             int milliseconds = (int) (updateTime % 1000);
-            txtTimer.setText(String.format("%2d", hours) + ":" + String.format("%2d", mins) + ":" + String.format("%2d", secs) + ":" + String.format("%3d", milliseconds));
+            txtTimer.setText(String.format("0" + "%2d", hours) + ":0" + String.format("%2d", mins) + ":" + String.format("%2d", secs) + "." + String.format("%3d", milliseconds));
             customHandler.postDelayed(this, 0);
         }
     };
@@ -281,6 +282,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, IBaseGp
                         buttonstartTimer.setImageResource(R.drawable.ic_pause);
                         startTime = SystemClock.uptimeMillis();
                         customHandler.postDelayed(updateTimerThread,0);
+
                     }
                     else{
                         Toast.makeText(getContext(), "Please select a Trail!", Toast.LENGTH_SHORT).show();
@@ -367,7 +369,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, IBaseGp
                                                         document.get("address").toString(),document.get("description").toString(),document.get("duration").toString(),
                                                         document.get("distance").toString(),document.get("speed").toString(),
                                                         document.get("date").toString(),document.get("urlPhoto").toString(),(GeoPoint) document.get("coordStart"),
-                                                        (GeoPoint) document.get("coordEnd"), (List<GeoPoint>) document.get("trailPoints"));
+                                                        (GeoPoint) document.get("coordEnd"), (List<GeoPoint>) document.get("trailPoints"), (String) document.get("parentTrail"));
 
 
                                                 imageModelArrayList.add(traill);
@@ -406,19 +408,21 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, IBaseGp
         args.putParcelable("CoordStart", allLatLngs.get(0));
         args.putParcelable("CoordEnd", allLatLngs.get(allLatLngs.size()-1));
         args.putParcelableArrayList("TrailPoints", allLatLngs);
+        args.putString("parentId", parentId);
         descriptionFragment.setArguments(args);
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.mapFragemnt, descriptionFragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
-    public static void idPressed (GeoPoint coordsStart, GeoPoint coordsEnd, List<LatLng> points) {
+    public static void idPressed (GeoPoint coordsStart, GeoPoint coordsEnd, List<LatLng> points, String parentId) {
 
         MapFragment mapF = new MapFragment();
         MapFragment.coordsStart = coordsStart;
         MapFragment.coordsEnd = coordsEnd;
         MapFragment.pointsChoose = points;
         MapFragment.trailPressed = true;
+        MapFragment.parentId = parentId;
         mapF.showTrail();
     }
 

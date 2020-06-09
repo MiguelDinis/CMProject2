@@ -20,8 +20,9 @@ public class Trail {
     private GeoPoint coordStart;
     private GeoPoint coordEnd;
     private List<GeoPoint> trailPoints;
+    private String parentTrail;
 
-    public Trail(String id, String trailName, String address, String description, String duration, String distance,String speed,String CreatedDate, String urlPhoto,GeoPoint coordStart, GeoPoint coordEnd,List<GeoPoint> trailPoints ) {
+    public Trail(String id, String trailName, String address, String description, String duration, String distance,String speed,String CreatedDate, String urlPhoto,GeoPoint coordStart, GeoPoint coordEnd,List<GeoPoint> trailPoints, String parentTrail ) {
         this.id = id;
         this.trailName = trailName;
         this.address = address;
@@ -34,6 +35,7 @@ public class Trail {
         this.coordStart = coordStart;
         this.coordEnd = coordEnd;
         this.trailPoints = trailPoints;
+        this.parentTrail = parentTrail;
 
     }
     public Trail(){}
@@ -113,6 +115,10 @@ public class Trail {
         return trailPoints;
     }
 
+    public String getParentTrail(){
+        return parentTrail;
+    }
+
     public void setAddress(String address) {
         this.address = address;
     }
@@ -140,4 +146,6 @@ public class Trail {
     public void setTrailPoints(List<GeoPoint> trailPoints) {
         this.trailPoints = trailPoints;
     }
+
+
 }
