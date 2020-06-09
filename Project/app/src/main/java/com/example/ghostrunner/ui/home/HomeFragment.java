@@ -63,6 +63,9 @@ public class HomeFragment extends Fragment {
     private TextView distance;
     private TextView duration;
     private TextView speed;
+    private TextView burned;
+    private TextView left;
+    long goal;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -74,10 +77,13 @@ public class HomeFragment extends Fragment {
         distance = (TextView) root.findViewById(R.id.distance);
         duration = (TextView) root.findViewById(R.id.timetotal);
         speed = (TextView) root.findViewById(R.id.maxspeed);
+        burned = (TextView) root.findViewById(R.id.burned);
+        left = (TextView) root.findViewById(R.id.left);
         traildisplaycont = 0;
         distanceTotal = "0.0";
         timeTotal = "0:0:0:0";
         speedTotal = "0.0";
+
         db = FirebaseFirestore.getInstance();
         main =  ((MainActivity) this.requireActivity());
         userId = main.getUserId();
@@ -85,6 +91,29 @@ public class HomeFragment extends Fragment {
         horizontalLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         trailsRecycler.setLayoutManager(horizontalLayoutManager);
         trails = new ArrayList<>();
+        db.collection("Users")
+                .whereEqualTo("id", userId)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (final QueryDocumentSnapshot document : task.getResult()) {
+                                goal = (long) document.get("userCalGoal");
+                            }
+                        }
+                    }
+                });
+        //double hour = ((dependencies.stopwatch.elapsedMilliseconds/3.6)*0.001)*0.001;
+        //global.burned += 8*global.weight*hour; //MET*weight(kg)*time(hour)
+        burned.setText("43");
+
+        //double calories = global.userGoal - global.burned;
+        /*String initCalories = global.userGoal.toString();
+        String caloriesString = calories.toString();
+        int nChar = initCalories.length;
+        return caloriesString.substring(0,nChar);*/
+        left.setText(String.valueOf(goal));
 
         Date c = Calendar.getInstance().getTime();
         SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
@@ -131,6 +160,7 @@ public class HomeFragment extends Fragment {
                                                         double mean =  Double.valueOf(speedTotal)+Double.valueOf(document.get("speed").toString())/traildisplaycont;
                                                         speedTotal = mean+"";
 
+
                                                         distance.setText(String.format("%.3f", Double.valueOf(distanceTotal))+" km");
                                                         duration.setText(timeTotal);
                                                         speed.setText(String.format("%.3f", Double.valueOf(speedTotal))+" ms");
@@ -171,4 +201,9 @@ public class HomeFragment extends Fragment {
 
         return root;
     }
+
+
+
+
+
 }
