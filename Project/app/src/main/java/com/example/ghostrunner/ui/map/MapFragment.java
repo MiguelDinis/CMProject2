@@ -455,6 +455,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, IBaseGp
 
     public void  showTrail()
     {   trailPressed = true;
+    if(mMap != null){
         mMap.clear();
         double lat1 = coordsStart.getLatitude();
         double lng1 = coordsStart.getLongitude ();
@@ -480,6 +481,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, IBaseGp
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
         fromCoords = mMap.addMarker(place1);
         toCoords = mMap.addMarker(place2);
+
+    }
+
 
         for (int z = 0; z < pointsChoose.size() - 1; z++) {
             LatLng src = pointsChoose.get(z);
