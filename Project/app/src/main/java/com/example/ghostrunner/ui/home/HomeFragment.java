@@ -66,13 +66,15 @@ public class HomeFragment extends Fragment {
     private TextView burned;
     private TextView left;
     long goal;
+    long weight;
+    String datt;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
         final View root = inflater.inflate(R.layout.fragment_home, container, false);
         imageModelArrayList = new ArrayList<>();
-        timeFormat = new SimpleDateFormat("HH:mm:ss:SSS");
+        timeFormat = new SimpleDateFormat("HH:mm:ss");
         timeFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
         distance = (TextView) root.findViewById(R.id.distance);
         duration = (TextView) root.findViewById(R.id.timetotal);
@@ -91,29 +93,7 @@ public class HomeFragment extends Fragment {
         horizontalLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         trailsRecycler.setLayoutManager(horizontalLayoutManager);
         trails = new ArrayList<>();
-        db.collection("Users")
-                .whereEqualTo("id", userId)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (final QueryDocumentSnapshot document : task.getResult()) {
-                                goal = (long) document.get("userCalGoal");
-                                left.setText(String.valueOf(goal));
-                            }
-                        }
-                    }
-                });
-        //double hour = ((dependencies.stopwatch.elapsedMilliseconds/3.6)*0.001)*0.001;
-        //global.burned += 8*global.weight*hour; //MET*weight(kg)*time(hour)
-        burned.setText("43");
 
-        //double calories = global.userGoal - global.burned;
-        /*String initCalories = global.userGoal.toString();
-        String caloriesString = calories.toString();
-        int nChar = initCalories.length;
-        return caloriesString.substring(0,nChar);*/
 
 
         Date c = Calendar.getInstance().getTime();
@@ -150,7 +130,9 @@ public class HomeFragment extends Fragment {
                                                     Date date1 = null, date2 = null;
                                                     try {
                                                         date1 = timeFormat.parse(timeTotal);
-                                                        date2 = timeFormat.parse(document.get("duration").toString());
+                                                        datt  = document.get("duration").toString();
+                                                        datt = datt.replaceAll("\\s+","");
+                                                        date2 = timeFormat.parse(datt);
                                                     } catch (ParseException e) {
                                                         e.printStackTrace();
                                                     }
@@ -195,6 +177,30 @@ public class HomeFragment extends Fragment {
 
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+        db.collection("Users")
+                .whereEqualTo("id", userId)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (final QueryDocumentSnapshot document : task.getResult()) {
+                                goal = (long) document.get("userCalGoal");
+                                weight = (long) document.get("userWeight");
+
+                                String[] splited = timeTotal.split(":");
+                                double hour = Double.parseDouble(splited[0]);
+                                double min = Double.parseDouble(splited[1])/60;
+                                double sec = Double.parseDouble(splited[2])/3600;
+                                double hours = hour+min+sec;
+                                double burnedcal = 8*weight*hours; //MET*weight(kg)*time(hour);
+                                burned.setText(burnedcal+" kcal");
+                                double caloriesLeft = goal - burnedcal;
+                                left.setText(String.valueOf(caloriesLeft));
+                            }
                         }
                     }
                 });

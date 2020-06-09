@@ -215,7 +215,7 @@
             android:id="@+id/imageView2"
             android:layout_width="87dp"
             android:layout_height="44dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="100dp"
             android:layout_marginLeft="22dp"
             android:src="@drawable/burned" />
 
@@ -224,7 +224,7 @@
             android:layout_width="51dp"
             android:layout_height="71dp"
             android:layout_marginLeft="45dp"
-            android:layout_marginTop="92dp"
+            android:layout_marginTop="25dp"
             android:src="@drawable/meters" />
 
     </androidx.cardview.widget.CardView>
