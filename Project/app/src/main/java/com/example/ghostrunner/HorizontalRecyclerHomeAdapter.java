@@ -62,6 +62,7 @@ public class HorizontalRecyclerHomeAdapter extends RecyclerView.Adapter<Horizont
                 AppCompatActivity activity = (AppCompatActivity) v.getContext();
                 Bundle args = new Bundle();
                 args.putString("trailName", model.getTrailName());
+                args.putString("time",model.getDuration());
                 Fragment myFragment = new trailsComparation();
                 myFragment.setArguments(args);
                 activity.getSupportFragmentManager().beginTransaction().replace(R.id.trails, myFragment).addToBackStack(null).commit();

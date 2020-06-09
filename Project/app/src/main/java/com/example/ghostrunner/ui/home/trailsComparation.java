@@ -46,6 +46,12 @@ public class trailsComparation extends Fragment {
     List<String> times;
     BarGraphSeries<DataPoint> series;
     BarGraphSeries<DataPoint> series1;
+    String myTime;
+    String name;
+    int counter;
+    int counter2;
+    Date newD;
+
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -57,11 +63,24 @@ public class trailsComparation extends Fragment {
         main =  ((MainActivity) this.requireActivity());
         userName = main.getUserName();
         trailName =  getArguments().getString("trailName");
+        myTime = getArguments().getString("time");
+
+        String dt = myTime;
+        dt = dt.replaceAll("\\s+", "");
+
+        SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss.SSS");
+        format.setTimeZone(TimeZone.getTimeZone("UTC"));
+        try {
+            newD = format.parse(dt);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        double dateNew = newD.getTime() / 1000;
         names = new ArrayList<>();
         ids = new ArrayList<>();
         times = new ArrayList<>();
         series = new BarGraphSeries<>(new DataPoint[] {
-                new DataPoint(0, 3)
+                new DataPoint(0, dateNew)
         });
         series.setColor(Color.rgb(100,0,0));
         series.setSpacing(50);
@@ -72,125 +91,99 @@ public class trailsComparation extends Fragment {
         graph.getViewport().setXAxisBoundsManual(true);
         graph.getViewport().setMinX(0);
         graph.addSeries(series);
+        graph.getLegendRenderer().setVisible(true);
+        graph.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
+
+        graph.getViewport().setYAxisBoundsManual(true);
+        graph.getViewport().setMinY(0);
+        graph.getViewport().setMaxY(dateNew + 60);
+
+
+// activate vertical scrolling
+        graph.getViewport().setScrollableY(true);
+
+
+
+        graph.getLegendRenderer().setVisible(true);
+        graph.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
+
+        graph.getGridLabelRenderer().setHorizontalLabelsVisible(false);
 
 
         db.collection("Trails")
                 .whereEqualTo("parentTrail", trailName)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
+                                           @Override
+                                           public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                               if (task.isSuccessful()) {
 
-                            /*
-                            graph.getViewport().setYAxisBoundsManual(true);
-                            graph.getViewport().setMinY(0);
-                            graph.getViewport().setXAxisBoundsManual(true);
-                            graph.getViewport().setMinX(0);
-                            //graph.getViewport().setMaxX(names.size() + 1);
-                            graph.getLegendRenderer().setVisible(true);
-                            graph.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
-                            //graph.getViewport().setYAxisBoundsManual(true);
-                            //graph.getViewport().setMinY(0);
-                            graph.getGridLabelRenderer().setHorizontalLabelsVisible(false);*/
-                            //legend
+                                                   for (QueryDocumentSnapshot document : task.getResult()) {
+                                                       if (!ids.contains(document.get("id").toString())){
+                                                           ids.add(document.get("id").toString());
+                                                       }
+                                                       times.add(document.get("duration").toString());
 
 
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                ids.add(document.get("id").toString());
-                                times.add(document.get("duration").toString());
-                            }
-                            for(String x : ids){
-                                Log.i(TAG, ids.toString());
-                                db.collection("Users")
-                                        .whereEqualTo("id", x)
-                                        .get()
-                                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                                if (task.isSuccessful()) {
-                                                    for (QueryDocumentSnapshot document : task.getResult()) {
-                                                        names.add(document.get("userName").toString());
-                                                    }
-                                                    int i = 1;
-                                                    int ii = 0;
-                                                    Date date;
-                                                    for(String x : names){
-                                                        //Log.i(TAG, x);
-                                                        String dtStart = times.get(ii);
-                                                        dtStart = dtStart.replaceAll("\\s+","");
+                                                   }
+                                               }
+                                               counter = 1;
+                                               counter2 = 0;
+                                                   for (String x : ids) {
 
-                                                        SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss.SSS");
-                                                        format.setTimeZone(TimeZone.getTimeZone("UTC"));
-                                                        try {
-                                                            date = format.parse(dtStart);
-                                                            double newDate = date.getTime() / 1000;
-                                                            //Log.i(TAG, String.valueOf(newDate));
-                                                            series1 = new BarGraphSeries<>(new DataPoint[] {
-                                                                    new DataPoint(i, newDate),
-                                                            });
+                                                       db.collection("Users")
+                                                               .whereEqualTo("id", x)
+                                                               .get()
+                                                               .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                                   @Override
+                                                                   public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                                       if (task.isSuccessful()) {
+                                                                           for (QueryDocumentSnapshot document : task.getResult()) {
+                                                                               name = document.get("userName").toString();
+                                                                           }
 
-                                                            series1.setSpacing(50);
-                                                            series1.setDrawValuesOnTop(true);
-                                                            series1.setColor(Color.rgb((int) i*255/4, (int) Math.abs(newDate*255/6), 100));
-                                                            series1.setValuesOnTopColor(Color.rgb((int) i*255/4, (int) Math.abs(newDate*255/6), 100));
-                                                            series1.setValuesOnTopSize(50);
-                                                            series1.setTitle(x);
-                                                            graph.addSeries(series1);
-                                                            graph.getViewport().setYAxisBoundsManual(true);
-                                                            graph.getViewport().setMinY(0);
+                                                                       }
+
+                                                                           Log.i(TAG,String.valueOf(counter));
+                                                                           Date date;
+                                                                           String dtStart = times.get(counter2);
+                                                                           dtStart = dtStart.replaceAll("\\s+", "");
+
+                                                                           SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss.SSS");
+                                                                           format.setTimeZone(TimeZone.getTimeZone("UTC"));
+                                                                           try {
+                                                                               date = format.parse(dtStart);
+                                                                               double newDate = date.getTime() / 1000;
+                                                                               //Log.i(TAG, String.valueOf(newDate));
+                                                                               series1 = new BarGraphSeries<>(new DataPoint[]{
+                                                                                       new DataPoint(counter, newDate),
+                                                                               });
+                                                                               graph.getViewport().setMaxX(ids.size() + 1);
+                                                                               series1.setSpacing(50);
+                                                                               series1.setDrawValuesOnTop(true);
+                                                                               series1.setColor(Color.rgb((int) counter * 255 / 4, (int) Math.abs(newDate * 255 / 6), 100));
+                                                                               series1.setValuesOnTopColor(Color.rgb((int) counter * 255 / 4, (int) Math.abs(newDate * 255 / 6), 100));
+                                                                               series1.setValuesOnTopSize(50);
+                                                                               series1.setTitle(name);
+                                                                               graph.addSeries(series1);
 
 
-                                                            graph.getViewport().setMaxX(names.size() + 1);
-                                                            graph.getLegendRenderer().setVisible(true);
-                                                            graph.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
-                                                            //graph.getViewport().setYAxisBoundsManual(true);
-                                                            //graph.getViewport().setMinY(0);
-                                                            graph.getGridLabelRenderer().setHorizontalLabelsVisible(false);
+                                                                           } catch (ParseException e) {
+                                                                               e.printStackTrace();
+                                                                           }
+                                                                           if(counter < ids.size() +1)
+                                                                               counter++;
+                                                                           if(counter2 < ids.size())
+                                                                               counter2++;
+
+                                                                   }
+                                                               });
+
+                                                   }
 
 
-
-                                                        } catch (ParseException e) {
-                                                            e.printStackTrace();
-                                                        }
-                                                        i++;
-                                                        ii++;
-                                                    }
-
-
-
-                                                    graph.getLegendRenderer().setVisible(true);
-                                                    graph.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
-                                                } else {
-                                                    Log.d(TAG, "Error getting documents: ", task.getException());
-                                                }
-                                            }
-                                        });
-                            }
-
-
-
-
-                        } else {
-                            Log.d(TAG, "Error getting documents: ", task.getException());
-                        }
-                    }
-                });
-
-
-
-
-
-
-
-// styling
-        /*
-        series.setValueDependentColor(new ValueDependentColor<DataPoint>() {
-            @Override
-            public int get(DataPoint data) {
-                return Color.rgb(0,0,100);
-            }
-        });*/
+                                           }
+                                       });
 
 
         graph.getGridLabelRenderer().setLabelFormatter(new DefaultLabelFormatter() {

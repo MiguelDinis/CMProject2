@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">CMProjeto</string>
+    <string name="app_name">GhostRunner</string>
     <string name="nav_home">Home</string>
     <string name="nav_map">Map</string>
     <string name="nav_runners">Runners</string>
