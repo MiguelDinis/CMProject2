@@ -100,6 +100,7 @@ public class HomeFragment extends Fragment {
                         if (task.isSuccessful()) {
                             for (final QueryDocumentSnapshot document : task.getResult()) {
                                 goal = (long) document.get("userCalGoal");
+                                left.setText(String.valueOf(goal));
                             }
                         }
                     }
@@ -113,7 +114,7 @@ public class HomeFragment extends Fragment {
         String caloriesString = calories.toString();
         int nChar = initCalories.length;
         return caloriesString.substring(0,nChar);*/
-        left.setText(String.valueOf(goal));
+
 
         Date c = Calendar.getInstance().getTime();
         SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
