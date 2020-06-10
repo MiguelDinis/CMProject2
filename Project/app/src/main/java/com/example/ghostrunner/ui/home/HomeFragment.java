@@ -197,9 +197,9 @@ public class HomeFragment extends Fragment {
                                 double sec = Double.parseDouble(splited[2])/3600;
                                 double hours = hour+min+sec;
                                 double burnedcal = 8*weight*hours; //MET*weight(kg)*time(hour);
-                                burned.setText(burnedcal+" kcal");
+                                burned.setText(String.format("%.1f", burnedcal)+" kcal");
                                 double caloriesLeft = goal - burnedcal;
-                                left.setText(String.valueOf(caloriesLeft));
+                                left.setText(String.format("%.1f", caloriesLeft));
                             }
                         }
                     }
